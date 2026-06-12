@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Agent-Economy Command Centre</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{color-scheme:dark}
+  *{box-sizing:border-box;margin:0}
+  body{font:14px/1.5 -apple-system,system-ui,sans-serif;background:#0b0f17;color:#e5e7eb;padding:28px}
+  header{display:flex;flex-wrap:wrap;align-items:baseline;gap:18px;margin-bottom:6px}
+  h1{font-size:22px}
+  .stamp{color:#6b7280;font-size:12px}
+  .totals{display:flex;gap:12px;margin:14px 0 26px}
+  .tot{background:#111827;border:1px solid #1f2937;border-radius:10px;padding:10px 18px;text-align:center}
+  .tot b{font-size:22px;display:block}
+  .tot.green b{color:#22c55e}.tot.blue b{color:#3b82f6}.tot.yellow b{color:#eab308}.tot.red b{color:#f87171}
+  .cols{display:grid;grid-template-columns:1.1fr .9fr;gap:26px}
+  @media(max-width:980px){.cols{grid-template-columns:1fr}}
+  h2{font-size:13px;letter-spacing:.08em;color:var(--g,#9ca3af);margin:0 0 10px;border-left:3px solid var(--g,#374151);padding-left:8px}
+  .group{margin-bottom:22px}
+  .channel{display:block;background:#111827;border:1px solid #1f2937;border-radius:10px;padding:12px 14px;margin-bottom:8px;text-decoration:none;color:inherit;transition:border-color .15s}
+  .channel:hover{border-color:var(--g,#4b5563)}
+  .ch-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+  .pill{font-size:11px;background:#1f2937;border-radius:99px;padding:2px 10px;color:#9ca3af}
+  .channel p{color:#9ca3af;font-size:12.5px}
+  .actor{display:flex;align-items:center;gap:12px;background:#111827;border:1px solid #1f2937;border-radius:10px;padding:10px 14px;margin-bottom:8px;text-decoration:none;color:inherit}
+  .actor:hover{border-color:var(--c)}
+  .dot{width:10px;height:10px;border-radius:99px;background:var(--c);flex:none}
+  .meta{flex:1}.meta span{display:block;font-size:11.5px;color:#9ca3af}
+  .parked,.queued{font-size:11px;color:#eab308;margin-top:3px}
+  .queued{color:#60a5fa}
+  .runs{font-variant-numeric:tabular-nums;color:#9ca3af;font-size:12px}
+  .note{background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:12px 16px;margin-bottom:24px;color:#94a3b8;font-size:12.5px}
+  .note b{color:#e2e8f0}
+</style></head><body>
+<header><h1>🛰️ Agent-Economy Command Centre</h1><span class="stamp">generated 2026-06-12 15:10 UTC · regen: <code>node scripts/build-command-center.mjs</code></span></header>
+<div class="totals">
+  <div class="tot green"><b>5</b>published</div>
+  <div class="tot blue"><b>7</b>queued (5/day cap)</div>
+  <div class="tot yellow"><b>1</b>parked</div>
+  <div class="tot red"><b id="ext-users">0</b>external users</div>
+</div>
+<div class="note"><b>Reality check (2026-06-12):</b> day-0 — actors not yet in Store search index; every niche has established incumbents. Levers: AEO listings (done ✓), competition gate on all new actors (done ✓), multi-channel listing (column 2), 48h rank re-check: <code>node scripts/store-check.mjs --rank-all</code>.</div>
+<div class="cols">
+  <div>
+    <h2 style="--g:#e5e7eb">SALES CHANNELS</h2>
+    
+  <section class="group" style="--g:#22c55e">
+    <h2>LIVE NOW</h2>
+    
+      <a class="channel" href="https://apify.com/oblanceolate_mandola" target="_blank">
+        <div class="ch-head"><strong>Apify Store</strong><span class="pill">SELLING</span></div>
+        <p>Pay-per-event, 80/20 split. 5 published, 5/day cap, daily 1PM routine drains the queue.</p>
+      </a>
+  </section>
+
+  <section class="group" style="--g:#3b82f6">
+    <h2>THIS WEEK — free agent-discovery listings</h2>
+    
+      <a class="channel" href="https://smithery.ai" target="_blank">
+        <div class="ch-head"><strong>Smithery</strong><span class="pill">not listed yet</span></div>
+        <p>MCP registry — list Apify MCP endpoint, billing stays on Apify.</p>
+      </a>
+      <a class="channel" href="https://glama.ai/mcp/servers" target="_blank">
+        <div class="ch-head"><strong>Glama</strong><span class="pill">not listed yet</span></div>
+        <p>35k+ MCP servers indexed — free listing.</p>
+      </a>
+      <a class="channel" href="https://mcp.so" target="_blank">
+        <div class="ch-head"><strong>mcp.so</strong><span class="pill">not listed yet</span></div>
+        <p>MCP directory — free listing.</p>
+      </a>
+      <a class="channel" href="https://www.pulsemcp.com" target="_blank">
+        <div class="ch-head"><strong>PulseMCP</strong><span class="pill">not listed yet</span></div>
+        <p>MCP directory + newsletter — free listing.</p>
+      </a>
+  </section>
+
+  <section class="group" style="--g:#a855f7">
+    <h2>NEXT — second paid marketplace</h2>
+    
+      <a class="channel" href="https://www.x402bazaar.org" target="_blank">
+        <div class="ch-head"><strong>x402 Bazaar</strong><span class="pill">planned</span></div>
+        <p>Agents pay USDC per call (~$24M/mo protocol volume, Chainalysis-verified growth). Weekend project: thin pay-per-call wrapper over the same specs.</p>
+      </a>
+      <a class="channel" href="https://mcpize.com" target="_blank">
+        <div class="ch-head"><strong>MCPize</strong><span class="pill">evaluating</span></div>
+        <p>Paid MCP marketplace — 85% rev share, Stripe fiat payouts. Traffic unproven.</p>
+      </a>
+      <a class="channel" href="https://mcp-hive.com" target="_blank">
+        <div class="ch-head"><strong>MCP Hive</strong><span class="pill">evaluating</span></div>
+        <p>Pay-per-use MCP marketplace. Traffic unproven.</p>
+      </a>
+  </section>
+
+  <section class="group" style="--g:#eab308">
+    <h2>LATER — when gated UAE data unblocks</h2>
+    
+      <a class="channel" href="https://app.snowflake.com/marketplace" target="_blank">
+        <div class="ch-head"><strong>Snowflake Marketplace</strong><span class="pill">parked</span></div>
+        <p>Enterprise datasets; needs reviewed company provider profile. Right home for GCC registry data.</p>
+      </a>
+      <a class="channel" href="https://aws.amazon.com/data-exchange/" target="_blank">
+        <div class="ch-head"><strong>AWS Data Exchange</strong><span class="pill">parked</span></div>
+        <p>Enterprise datasets — same play as Snowflake.</p>
+      </a>
+      <a class="channel" href="https://datarade.ai" target="_blank">
+        <div class="ch-head"><strong>Datarade</strong><span class="pill">parked</span></div>
+        <p>Data-product broker — fits gated datasets, not tool calls.</p>
+      </a>
+  </section>
+
+  <section class="group" style="--g:#6b7280">
+    <h2>SKIP</h2>
+    
+      <a class="channel" href="https://rapidapi.com" target="_blank">
+        <div class="ch-head"><strong>RapidAPI</strong><span class="pill">skipped</span></div>
+        <p>Nokia-acquired, pivoting to telco, declining listings, 20% fee. Sinking shelf.</p>
+      </a>
+  </section>
+  </div>
+  <div>
+    <h2 style="--g:#e5e7eb">ACTOR PORTFOLIO (13)</h2>
+    <a class="actor" href="https://apify.com/oblanceolate_mandola/company-hiring-signals" target="_blank" style="--c:#22c55e">
+    <div class="dot"></div>
+    <div class="meta"><strong>company-hiring-signals</strong><span>PUBLISHED · $0.002/result · AEO ✓</span></div>
+    <span class="runs" data-slug="company-hiring-signals">–</span>
+  </a>
+<a class="actor" href="https://console.apify.com/actors?search=uae-business-verify" target="_blank" style="--c:#eab308">
+    <div class="dot"></div>
+    <div class="meta"><strong>uae-business-verify</strong><span>PARKED · $0.05/result</span><div class="parked">⏸ Dubai Pulse registration requires a UAE IP; awaiting API credential. See uae-business-verify/DEPLOY.md.</div></div>
+    <span class="runs" data-slug="uae-business-verify">–</span>
+  </a>
+<a class="actor" href="https://apify.com/oblanceolate_mandola/sec-edgar-filings" target="_blank" style="--c:#22c55e">
+    <div class="dot"></div>
+    <div class="meta"><strong>sec-edgar-filings</strong><span>PUBLISHED · $0.005/result · AEO ✓</span></div>
+    <span class="runs" data-slug="sec-edgar-filings">–</span>
+  </a>
+<a class="actor" href="https://apify.com/oblanceolate_mandola/research-paper-search" target="_blank" style="--c:#22c55e">
+    <div class="dot"></div>
+    <div class="meta"><strong>research-paper-search</strong><span>PUBLISHED · $0.003/result · AEO ✓</span></div>
+    <span class="runs" data-slug="research-paper-search">–</span>
+  </a>
+<a class="actor" href="https://apify.com/oblanceolate_mandola/github-repo-search" target="_blank" style="--c:#22c55e">
+    <div class="dot"></div>
+    <div class="meta"><strong>github-repo-search</strong><span>PUBLISHED · $0.003/result · AEO ✓</span></div>
+    <span class="runs" data-slug="github-repo-search">–</span>
+  </a>
+<a class="actor" href="https://apify.com/oblanceolate_mandola/hacker-news-monitor" target="_blank" style="--c:#22c55e">
+    <div class="dot"></div>
+    <div class="meta"><strong>hacker-news-monitor</strong><span>PUBLISHED · $0.002/result · AEO ✓</span></div>
+    <span class="runs" data-slug="hacker-news-monitor">–</span>
+  </a>
+<a class="actor" href="https://console.apify.com/actors?search=federal-register-monitor" target="_blank" style="--c:#3b82f6">
+    <div class="dot"></div>
+    <div class="meta"><strong>federal-register-monitor</strong><span>PUSHED · $0.004/result · AEO ✓</span><div class="queued">⏳ 5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)</div></div>
+    <span class="runs" data-slug="federal-register-monitor">–</span>
+  </a>
+<a class="actor" href="https://console.apify.com/actors?search=clinical-trials-search" target="_blank" style="--c:#3b82f6">
+    <div class="dot"></div>
+    <div class="meta"><strong>clinical-trials-search</strong><span>PUSHED · $0.004/result · AEO ✓</span><div class="queued">⏳ 5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)</div></div>
+    <span class="runs" data-slug="clinical-trials-search">–</span>
+  </a>
+<a class="actor" href="https://console.apify.com/actors?search=stackoverflow-search" target="_blank" style="--c:#3b82f6">
+    <div class="dot"></div>
+    <div class="meta"><strong>stackoverflow-search</strong><span>PUSHED · $0.002/result · AEO ✓</span><div class="queued">⏳ 5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)</div></div>
+    <span class="runs" data-slug="stackoverflow-search">–</span>
+  </a>
+<a class="actor" href="https://console.apify.com/actors?search=gdelt-news-monitor" target="_blank" style="--c:#3b82f6">
+    <div class="dot"></div>
+    <div class="meta"><strong>gdelt-news-monitor</strong><span>PUSHED · $0.002/result · AEO ✓</span><div class="queued">⏳ 5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)</div></div>
+    <span class="runs" data-slug="gdelt-news-monitor">–</span>
+  </a>
+<a class="actor" href="https://console.apify.com/actors?search=wikipedia-search" target="_blank" style="--c:#3b82f6">
+    <div class="dot"></div>
+    <div class="meta"><strong>wikipedia-search</strong><span>PUSHED · $0.001/result · AEO ✓</span><div class="queued">⏳ 5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)</div></div>
+    <span class="runs" data-slug="wikipedia-search">–</span>
+  </a>
+<a class="actor" href="https://console.apify.com/actors?search=court-opinions-search" target="_blank" style="--c:#3b82f6">
+    <div class="dot"></div>
+    <div class="meta"><strong>court-opinions-search</strong><span>PUSHED · $0.004/result · AEO ✓</span><div class="queued">⏳ 5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)</div></div>
+    <span class="runs" data-slug="court-opinions-search">–</span>
+  </a>
+<a class="actor" href="https://console.apify.com/actors?search=podcast-search" target="_blank" style="--c:#3b82f6">
+    <div class="dot"></div>
+    <div class="meta"><strong>podcast-search</strong><span>PUSHED · $0.002/result · AEO ✓</span><div class="queued">⏳ 5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)</div></div>
+    <span class="runs" data-slug="podcast-search">–</span>
+  </a>
+    <div class="note" style="margin-top:14px">Run counts load live from Apify's public API for published actors (anonymous — no token in this file). “–” = not public yet.</div>
+  </div>
+</div>
+<script>
+// Anonymous fetch of PUBLIC actor stats only — no credentials anywhere in this page.
+document.querySelectorAll('.runs[data-slug]').forEach(async (el) => {
+  try {
+    const r = await fetch('https://api.apify.com/v2/acts/oblanceolate_mandola~' + el.dataset.slug);
+    if (!r.ok) return;
+    const { data } = await r.json();
+    if (data && data.stats) {
+      el.textContent = (data.stats.totalRuns ?? 0) + ' runs · ' + (data.stats.totalUsers ?? 0) + ' users';
+      window.__ext = (window.__ext || 0) + Math.max(0, (data.stats.totalUsers ?? 0) - 2); // minus us + review bot
+      document.getElementById('ext-users').textContent = window.__ext;
+    }
+  } catch {}
+});
+</script>
+</body></html>
