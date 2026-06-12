@@ -69,17 +69,24 @@ in the repo is a convenience snapshot, not the source of truth in the cloud.)
 > `apify info`. (2) List existing actors via the Apify API to know what sources are already
 > built — never duplicate. (3) Read 06-Agent-Economy/actor-factory/PLAYBOOK.md. (4) Discover
 > ONE fresh public, no-auth, list-shaped, agent-relevant JSON API NOT already built and NOT in
-> the parked list. (5) MOAT GATE: live-probe reachability+shape + check Apify Store
-> competition; if it fails, try one more candidate, then SKIP the day and PushNotify "no
-> quality source — well dry." (6) Build spec + faithful fixture, scaffold via
-> scripts/new-actor.mjs, confirm 27/27 tests. (7) Bug-hunt INLINE: npm test + a live smoke run
-> + probe the risky paths (URL absoluteness, date transforms, null fields, no Actor.charge).
-> Fix every confirmed bug with a regression test; back-port systemic fixes to template/. (8)
-> `apify push`. (9) Set pricing (apify-default-dataset-item, isPrimaryEvent, measured price),
-> categories, seoTitle=title, seoDescription (≤155 chars, keyword variations), output schema
-> via API. (10) Run scripts/smoke-all.mjs for the new actor; only if it returns real items:
-> [PUBLISH MODE] set isPublic=true via API. [REVIEW MODE] leave private. (11) PushNotify the
-> result. NEVER pad the count; honesty over volume.
+> the parked list. (5) COMPETITION GATE (enforced — the scaffolder refuses specs without it):
+> run `node scripts/store-check.mjs "<topic keywords>"` with 2-3 keyword variants buyers would
+> type. SATURATED → kill the candidate (no gateOverride in autonomous runs — overrides are a
+> human decision); CONTESTABLE → write a FACTUAL differentiation (it renders into the listing);
+> OPEN → record demandEvidence. Also live-probe source reachability+shape. If two candidates
+> in a row fail, SKIP the day and PushNotify "no quality source — well dry"; a skipped day is
+> success, a me-too actor is failure. (6) Build spec (paste the storeCheck block in) + faithful
+> fixture, scaffold via scripts/new-actor.mjs, confirm all tests green. (7) Bug-hunt INLINE:
+> npm test + a live smoke run + probe the risky paths (URL absoluteness, date transforms, null
+> fields, no Actor.charge). Fix every confirmed bug with a regression test; back-port systemic
+> fixes to template/. (8) `apify push`. (9) Set pricing (apify-default-dataset-item,
+> isPrimaryEvent, measured price), categories, seoTitle=title, seoDescription (145-155 chars,
+> keyword variations), output schema via API. AEO check: README must have the "Why pick this
+> Actor" section (template renders it from storeCheck.differentiation) and the two agent-task
+> FAQ entries — every claim field-verified. (10) Run scripts/smoke-all.mjs for the new actor;
+> only if it returns real items: [PUBLISH MODE] set isPublic=true via API. [REVIEW MODE] leave
+> private. (11) Run `node scripts/store-check.mjs --rank-all` and include rank movements in the
+> PushNotify result. NEVER pad the count; honesty over volume.
 
 ## Setup script: `scripts/routine-setup.sh`
 

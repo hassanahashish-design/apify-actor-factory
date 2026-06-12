@@ -6,7 +6,33 @@ This is the full contract — nothing here is discoverable only by reading code.
 
 ## Required top-level fields (scaffold hard-fails without them)
 
-`slug`, `title`, `shortDescription`, `seoTitle`, `seoDescription`, `sources`, `pricing`, `query`.
+`slug`, `title`, `shortDescription`, `seoTitle`, `seoDescription`, `sources`, `pricing`, `query`,
+and `storeCheck` (see below — the competition gate).
+
+## `storeCheck` — the enforced competition gate (since 2026-06-12)
+
+Produce it with `node scripts/store-check.mjs "<topic keywords>"` (2-3 variants buyers would
+type) and paste the emitted block in. The scaffolder hard-fails without it, if it is older
+than 7 days, or if its verdict-specific field is missing:
+
+```jsonc
+"storeCheck": {
+  "checkedAt": "2026-06-12",            // must be <=7 days old at scaffold time
+  "keywords": ["court opinions", "case law scraper"],
+  "establishedIncumbents": 2,           // actors with >=100 runs, deduped across keywords
+  "topIncumbent": "user/name (runs)",   // null when OPEN
+  "verdict": "CONTESTABLE",             // OPEN | CONTESTABLE | SATURATED
+  "differentiation": "...",             // REQUIRED if CONTESTABLE — factual angle no incumbent
+                                        //   covers; renders as the first "Why pick this Actor"
+                                        //   bullet in the README, so write it for buyers
+  "demandEvidence": "...",              // REQUIRED if OPEN — citable signal someone wants this
+  "gateOverride": { "reason": "..." }   // ONLY way past SATURATED — a named, auditable bet.
+                                        //   Never use in autonomous/cloud runs.
+}
+```
+
+Why it exists: 8 actors shipped into saturated niches (5-8 incumbents, 100-28k runs) and got
+zero external users. The check was prose before; now it's a gate.
 
 ## All fields
 

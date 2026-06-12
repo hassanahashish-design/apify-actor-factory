@@ -4,7 +4,7 @@
     {
       "slug": "company-hiring-signals",
       "username": "oblanceolate_mandola",
-      "status": "pushed",
+      "status": "published",
       "moat": "Aggregation + normalization across 3 ATS APIs; GCC/UAE-angle listing planned. Live competition: several incumbents — differentiation is the unified shape + hiring-signal framing.",
       "pricePerResultUsd": 0.002,
       "canary": {
@@ -30,7 +30,8 @@
       "billingModel": "apify-default-dataset-item (automatic)",
       "displayInfoSet": "2026-06-12",
       "outputSchemaSet": "2026-06-12",
-      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+      "publishedAt": "2026-06-12",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "uae-business-verify",
@@ -50,7 +51,7 @@
     {
       "slug": "sec-edgar-filings",
       "username": "oblanceolate_mandola",
-      "status": "pushed",
+      "status": "published",
       "moat": "Official SEC full-text filings; finance/due-diligence buyers; few clean agent-ready actors",
       "pricePerResultUsd": 0.005,
       "canary": {
@@ -72,12 +73,13 @@
       "billingModel": "apify-default-dataset-item (automatic)",
       "displayInfoSet": "2026-06-12",
       "outputSchemaSet": "2026-06-12",
-      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+      "publishedAt": "2026-06-12",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "research-paper-search",
       "username": "oblanceolate_mandola",
-      "status": "pushed",
+      "status": "published",
       "moat": "OpenAlex 250M works; research/grounding buyers; clean citations",
       "pricePerResultUsd": 0.003,
       "canary": {
@@ -99,12 +101,13 @@
       "billingModel": "apify-default-dataset-item (automatic)",
       "displayInfoSet": "2026-06-12",
       "outputSchemaSet": "2026-06-12",
-      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+      "publishedAt": "2026-06-12",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "github-repo-search",
       "username": "oblanceolate_mandola",
-      "status": "pushed",
+      "status": "published",
       "moat": "GitHub repo metadata; dev-tooling/vetting buyers",
       "pricePerResultUsd": 0.003,
       "canary": {
@@ -126,12 +129,13 @@
       "billingModel": "apify-default-dataset-item (automatic)",
       "displayInfoSet": "2026-06-12",
       "outputSchemaSet": "2026-06-12",
-      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+      "publishedAt": "2026-06-12",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "hacker-news-monitor",
       "username": "oblanceolate_mandola",
-      "status": "pushed",
+      "status": "published",
       "moat": "HN Algolia search; brand/trend monitoring buyers",
       "pricePerResultUsd": 0.002,
       "canary": {
@@ -153,7 +157,8 @@
       "billingModel": "apify-default-dataset-item (automatic)",
       "displayInfoSet": "2026-06-12",
       "outputSchemaSet": "2026-06-12",
-      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+      "publishedAt": "2026-06-12",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "federal-register-monitor",
@@ -179,7 +184,8 @@
       "billingModel": "apify-default-dataset-item (automatic)",
       "displayInfoSet": "2026-06-12",
       "outputSchemaSet": "2026-06-12",
-      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+      "publishBlockedBy": "5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "clinical-trials-search",
@@ -205,7 +211,8 @@
       "billingModel": "apify-default-dataset-item (automatic)",
       "displayInfoSet": "2026-06-12",
       "outputSchemaSet": "2026-06-12",
-      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+      "publishBlockedBy": "5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "stackoverflow-search",
@@ -231,7 +238,8 @@
       "billingModel": "apify-default-dataset-item (automatic)",
       "displayInfoSet": "2026-06-12",
       "outputSchemaSet": "2026-06-12",
-      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+      "publishBlockedBy": "5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "gdelt-news-monitor",
@@ -253,7 +261,9 @@
       "bugHuntPassed": true,
       "bugHuntAt": "2026-06-12",
       "bugHuntResult": "SHIP (inline bug-hunt, sub-agents kept dying on ConnectionRefused): rate-limit plaintext-200 surfaces clean error not crash/silent; gdeltDate ok; no Actor.charge; 27/27",
-      "billingModel": "apify-default-dataset-item (automatic)"
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "publishBlockedBy": "5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "wikipedia-search",
@@ -275,7 +285,9 @@
       "bugHuntPassed": true,
       "bugHuntAt": "2026-06-12",
       "bugHuntResult": "SHIP (inline bug-hunt): excerpt cleaned, sourceUrl present, null-description handled, no Actor.charge; 27/27. Minor cosmetic: stripHtml leaves stray space in search-match excerpts",
-      "billingModel": "apify-default-dataset-item (automatic)"
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "publishBlockedBy": "5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "court-opinions-search",
@@ -297,7 +309,9 @@
       "bugHuntPassed": true,
       "bugHuntAt": "2026-06-12",
       "bugHuntResult": "SHIP (inline): clUrl transform makes absolute opinion URLs, real cases returned, no Actor.charge, 27/27",
-      "billingModel": "apify-default-dataset-item (automatic)"
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "publishBlockedBy": "5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)",
+      "aeoUpgraded": "2026-06-12"
     },
     {
       "slug": "podcast-search",
@@ -319,7 +333,9 @@
       "bugHuntPassed": true,
       "bugHuntAt": "2026-06-12",
       "bugHuntResult": "SHIP (inline): full Apple Podcasts URLs, feedUrl optional, no Actor.charge, 27/27",
-      "billingModel": "apify-default-dataset-item (automatic)"
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "publishBlockedBy": "5/day publish cap — queued for next window (cloud routine drains backlog daily 1PM)",
+      "aeoUpgraded": "2026-06-12"
     }
   ]
 }

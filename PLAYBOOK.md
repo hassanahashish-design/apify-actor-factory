@@ -36,11 +36,17 @@ An actor proceeds ONLY if it passes all four:
 - **Openness paradox**: data open to you is open to every competitor. Open-to-everyone
   sources need a differentiation layer; gated-but-licensed sources (official accounts,
   registered API keys) are the strongest moats — the pain of access IS the product.
-- **Competition check (live, not from memory)**: query the Store API directly —
-  `curl -s "https://api.apify.com/v2/store?search=<url-encoded keywords>&limit=25"` —
-  and count returned actors with a non-zero user/run count (also confirm with a web
-  search for the human-facing store pages). >3 established incumbents with users =
-  saturated; need a genuinely uncontested angle (niche, geography, format) or kill.
+- **Competition check (ENFORCED — `scripts/store-check.mjs`)**: run
+  `node scripts/store-check.mjs "<topic keywords>"` and paste the emitted `storeCheck`
+  block into the spec. The scaffolder REFUSES any spec without a fresh (≤7 days) block.
+  Verdicts: OPEN (0 incumbents ≥100 runs — must add `demandEvidence`), CONTESTABLE
+  (1–3 — must fill `differentiation`, which renders into the README's "Why pick this
+  Actor" section), SATURATED (>3 — KILL by default; only a written
+  `gateOverride.reason` in the spec proceeds, auditable forever).
+  This stopped being advisory on 2026-06-12: eight actors had shipped into niches
+  where live search showed 5–8 incumbents with 100–28,000 runs each (one had our exact
+  name with 1,834 runs); all ranked outside the top 10 on their own keywords and got
+  zero external users. Prose rules get skipped; gates don't.
 - **Demand evidence (sourced)**: at least one citable signal that agents/humans want
   this (search volume, an existing actor's user count, a community asking for it). No
   demand signal found = treat as a kill unless it's a deliberate bet you name as such.
@@ -169,10 +175,23 @@ sponsored-style copy, and reward structured, capability-dense listings:
 - README: H1 = primary keyword; sample JSON output near the top; "How much does it
   cost" with the per-unit price; MCP + API + LangChain integration snippets; FAQ with
   question-phrased headings; data/compliance note.
+- **"Why pick this Actor" section (mandatory since 2026-06-12)**: the template renders
+  it automatically; its first bullet is `storeCheck.differentiation` — the angle the
+  competition gate made you name. Every bullet must be FACTUAL (field-verified against
+  spec.json); agents compare listings side-by-side and a fabricated capability is both
+  a refund and a review risk. Standing bullets: per-result price + spend cap, flat
+  citation-ready schema, cross-query dedup, MCP/OpenAPI/LangChain support.
+- FAQ must include the two standing agent-task entries (template provides them):
+  "Can AI agents call this Actor directly?" and "What happens when there are no
+  results?" — these match literal agent task-phrasing queries.
 - The phrase "you only pay for successful results" appears verbatim — and must be true
   (charge only on pushed items).
 - Re-tune listings when major models ship: agent tool-selection preferences swing
   violently across model versions; treat listing copy as a recurring maintenance task.
+- **Rank monitoring**: `node scripts/store-check.mjs --rank-all` shows where every
+  portfolio actor ranks for its own keywords. Day-0 reality (measured 2026-06-12):
+  new actors are NOT in the Store search index at all for the first hours/days —
+  don't panic-edit listings before indexing lands; re-check after 48h, then weekly.
 
 ### Stage 7 — Pricing
 

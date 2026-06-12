@@ -10,6 +10,10 @@ __WHAT_LIST__
 
 **You only pay for successful results** — failed or empty lookups cost nothing.
 
+## Why pick this Actor
+
+__WHY_LIST__
+
 ## Sample output
 
 Each dataset item is flat, typed JSON with a `sourceUrl` and `scrapedAt` for citation/grounding:
@@ -82,6 +86,14 @@ Reads only publicly accessible endpoints. No login, no credential harvesting, no
 ## FAQ
 
 __FAQ__
+
+### Can AI agents call this Actor directly?
+
+Yes — via the Apify MCP server (snippet above), the OpenAPI schema on the Actor's API tab, or the LangChain/CrewAI tool wrapper. Results are flat JSON with `sourceUrl` and `scrapedAt` on every item, so downstream agents can cite and re-verify.
+
+### What happens when there are no results?
+
+You pay nothing. Billing is per dataset item delivered, so an empty lookup costs $0, and the run log states why (no match, source rate limit) instead of failing silently.
 
 ## Changelog
 

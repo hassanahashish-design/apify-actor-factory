@@ -29,6 +29,31 @@ if (missing.length) {
   process.exit(1);
 }
 
+// COMPETITION GATE (enforced 2026-06-12, after 8 actors shipped into saturated niches
+// and got zero users). Every spec must carry a fresh storeCheck block produced by
+// scripts/store-check.mjs — run: node scripts/store-check.mjs "<topic keywords>".
+// There is NO CLI bypass; a deliberate bet into a saturated niche must be written
+// into the spec itself as storeCheck.gateOverride.reason (auditable forever).
+{
+  const sc = spec.storeCheck;
+  const fail = (msg) => {
+    console.error(`COMPETITION GATE: ${msg}\nRun: node scripts/store-check.mjs "<topic keywords>" and paste the storeCheck block into the spec.`);
+    process.exit(1);
+  };
+  if (!sc) fail('spec has no storeCheck block — the live Store competition check is mandatory before any build.');
+  if (!Array.isArray(sc.keywords) || !sc.keywords.length) fail('storeCheck.keywords is empty.');
+  if (!sc.checkedAt) fail('storeCheck.checkedAt missing.');
+  const ageDays = (Date.now() - new Date(sc.checkedAt).getTime()) / 86400000;
+  if (!(ageDays >= 0 && ageDays <= 7)) fail(`storeCheck is stale (${sc.checkedAt}) — re-run the check; rankings move.`);
+  if (sc.verdict === 'SATURATED' && !sc.gateOverride?.reason)
+    fail(`verdict is SATURATED (${sc.establishedIncumbents} incumbents, top: ${sc.topIncumbent}). KILL by default — a new entrant starts invisible behind incumbents with social proof. To proceed as a deliberate named bet, set storeCheck.gateOverride.reason.`);
+  if (sc.verdict === 'CONTESTABLE' && (!sc.differentiation || /^REQUIRED/.test(sc.differentiation)))
+    fail('verdict is CONTESTABLE — storeCheck.differentiation must name the angle no incumbent covers (it goes in the listing).');
+  if (sc.verdict === 'OPEN' && !sc.demandEvidence)
+    fail('verdict is OPEN — an empty niche can mean no buyers. Set storeCheck.demandEvidence (a citable signal someone wants this).');
+  console.log(`Competition gate: ${sc.verdict}${sc.gateOverride ? ' (override: ' + sc.gateOverride.reason + ')' : ''} — checked ${sc.checkedAt}`);
+}
+
 const outDir = process.argv.slice(3).find((a) => !a.startsWith('--')) ?? path.join(path.dirname(factoryRoot), spec.slug);
 
 // SAFETY: refuse to overwrite an existing actor dir. After Stage 3, the generated
@@ -125,6 +150,21 @@ const tokens = {
   __SOURCE_SUMMARY__: spec.sources.map((s) => s.id).join(', '),
   __USERNAME__: spec.username ?? 'your-username',
   __FAQ__: (spec.readme?.faq ?? []).map((f) => `### ${f.q}\n\n${f.a}`).join('\n\n') || '_No FAQ provided._',
+  // AEO: the "Why pick this Actor" section. The first bullet is the niche
+  // differentiation the competition gate required — the storeCheck finding flows
+  // straight into the listing so agent buyers see the angle, not just we do.
+  __WHY_LIST__: (() => {
+    const bullets = [];
+    const diff = spec.storeCheck?.differentiation;
+    if (diff && !/^REQUIRED/.test(diff)) bullets.push(diff);
+    bullets.push(
+      `Per-result pricing ($${spec.pricing.pricePerResultUsd}/result) with a hard \`maxResults\` spend cap — empty lookups cost $0`,
+      'Flat, stable JSON schema with `sourceUrl` + `scrapedAt` on every item — citation-ready for RAG and grounding',
+      'Batch many queries in one run; overlapping results are deduplicated and charged once',
+      'MCP server, OpenAPI schema, and LangChain/CrewAI tool support out of the box — no glue code',
+    );
+    return bullets.map((b) => `- ${b}`).join('\n');
+  })(),
   // README filter row must match the ACTUAL exposed filters (jobs-only ones are
   // stripped from the schema for non-jobs actors), and only mention includeDescription
   // when a source actually supports it — never advertise an input that does nothing.
