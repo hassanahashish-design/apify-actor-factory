@@ -67,9 +67,14 @@ in the repo is a convenience snapshot, not the source of truth in the cloud.)
 
 > Run ONE Apify actor factory batch. (1) `apify login` is already done by setup; confirm with
 > `apify info`. (2) List existing actors via the Apify API to know what sources are already
-> built — never duplicate. (3) Read 06-Agent-Economy/actor-factory/PLAYBOOK.md. (4) Discover
-> ONE fresh public, no-auth, list-shaped, agent-relevant JSON API NOT already built and NOT in
-> the parked list. (5) COMPETITION GATE (enforced — the scaffolder refuses specs without it):
+> built — never duplicate. (2b) EXPLOIT CHECK (PLAYBOOK "Portfolio strategy"): scan existing
+> actors' stats for traction (external paying user, totalUsers > 2 and growing, or top-10
+> Store rank on a real keyword). If ANY actor shows traction, today's build goes to a SIBLING
+> in that winning niche (adjacent source, same buyer) instead of a random new one — the
+> market voted; reinforce it. (3) Read 06-Agent-Economy/actor-factory/PLAYBOOK.md. (4) No
+> traction → EXPLORE: pick a candidate from DISCOVERY-POOL.md (or equally weird) in a
+> VERTICAL different from the last 5 actors built — public, no-auth, list-shaped,
+> agent-relevant JSON API, NOT already built and NOT in the parked list. (5) COMPETITION GATE (enforced — the scaffolder refuses specs without it):
 > run `node scripts/store-check.mjs "<topic keywords>"` with 2-3 keyword variants buyers would
 > type. SATURATED → kill the candidate (no gateOverride in autonomous runs — overrides are a
 > human decision); CONTESTABLE → write a FACTUAL differentiation (it renders into the listing);

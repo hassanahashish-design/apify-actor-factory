@@ -228,6 +228,28 @@ Scheduled health checks on every published actor: run success rate, source schem
 drift (fail-loud column/shape detection makes drift visible), earnings, issue-response
 SLA (<24h — it feeds store ranking). Breakage found by monitoring, not by customers.
 
+## Portfolio strategy — diversified volume + double-down (Hassan's directive, 2026-06-12)
+
+The portfolio is a power-law bet: many cheap, genuinely different actors; expect most to
+earn $0 and a few to pay for everything. This only works under three rules:
+
+1. **Diversity must be on demand axes, not topic names.** Twelve actors in twelve "different"
+   niches all failed identically because they shared the same traits: free commodity API +
+   crowded layer + zero push. EXPLORE rule: each new actor must differ from the last 5 in
+   VERTICAL (finance/safety/aviation/culture/energy/legal/...) and ideally BUYER TYPE
+   (sales-intel vs compliance vs consumer-agent vs ops). Consult DISCOVERY-POOL.md for
+   deliberately weird candidates; the competition gate still applies to every one.
+2. **Carrying cost per actor must stay ~$0.** Volume is only viable because tests, monitor,
+   pricing, AEO and publishing are automated. Any actor needing manual babysitting gets
+   fixed systemically or unpublished — a portfolio of 100 needs the same attention as 10.
+3. **EXPLOIT (double-down) trigger — checked BEFORE building anything new each day:**
+   scan the portfolio via API for traction: any actor with an external paying user, OR
+   totalUsers > 2 and growing, OR ranked top-10 in Store search for a real keyword.
+   On trigger: that day's build budget goes to the WINNING niche instead of a random new
+   one — 1-2 sibling actors (adjacent sources, same buyer), AEO refresh with the winning
+   keywords, and consider a deliberate gateOverride push into the same buyer's other needs.
+   The market votes; we reinforce whatever it votes for. No traction anywhere → explore.
+
 ## Queue discipline — the park-and-switch rule (anti-Dubai-Pulse)
 
 The portfolio's scarcest resource is wall-clock time, not ideas. We once burned hours
