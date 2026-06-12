@@ -1,0 +1,110 @@
+{
+  "slug": "wikipedia-search",
+  "username": "oblanceolate_mandola",
+  "title": "Wikipedia Search — Article Lookup to JSON",
+  "shortDescription": "Search Wikipedia by keyword and get matching article titles, descriptions and snippets as JSON — $0.001 per result.",
+  "seoTitle": "Wikipedia Search Scraper — Article Lookup to JSON API (title, description, snippet)",
+  "seoDescription": "Wikipedia search API & scraper: look up articles by keyword for title, short description and snippet as JSON. For grounding and research AI agents.",
+  "categories": [
+    "AI",
+    "NEWS",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "description",
+    "key"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.001
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "Search term",
+    "description": "Term to look up on Wikipedia, e.g. a person, company, concept, or place — for grounding and disambiguation.",
+    "example": "agentic commerce",
+    "prefill": [
+      "agentic commerce"
+    ]
+  },
+  "readme": {
+    "intro": "Agents grounding their answers need fast, structured access to encyclopedic facts. This actor turns a query into the matching Wikipedia articles with their short descriptions and snippets, so research and RAG agents can disambiguate entities and cite a stable source.",
+    "bullets": [
+      "Search Wikipedia by keyword for matching articles",
+      "Each result: page title, short description, matching snippet (clean text), page key",
+      "Open any article at en.wikipedia.org/wiki/{key}",
+      "Batch many terms per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with sourceUrl + scrapedAt for citation"
+    ],
+    "sampleOutput": {
+      "query": "agentic commerce",
+      "source": "wikipedia",
+      "title": "Agentic commerce",
+      "description": "Form of automated electronic commerce",
+      "key": "Agentic_commerce",
+      "sourceUrl": "https://en.wikipedia.org/w/rest.php/v1/search/page?q=agentic+commerce",
+      "scrapedAt": "2026-06-11T15:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "How do I open the article?",
+        "a": "Each result includes its page key; the article is at en.wikipedia.org/wiki/{key}."
+      },
+      {
+        "q": "Are snippets clean text?",
+        "a": "Yes — search-match HTML in excerpts is stripped to readable text."
+      },
+      {
+        "q": "What is the source?",
+        "a": "The official Wikimedia REST search API for English Wikipedia."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "wikipedia",
+      "urlTemplate": "https://en.wikipedia.org/w/rest.php/v1/search/page?q={query}",
+      "params": {
+        "limit": "50"
+      },
+      "itemsPath": "pages",
+      "fields": {
+        "jobId": {
+          "path": "id",
+          "transform": "toString"
+        },
+        "title": "title",
+        "key": "key",
+        "description": "description",
+        "excerpt": {
+          "path": "excerpt",
+          "transform": "stripHtml"
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "wikipedia": {
+      "pages": [
+        {
+          "id": 81833913,
+          "key": "Agentic_commerce",
+          "title": "Agentic commerce",
+          "excerpt": "<span class=\"searchmatch\">Agentic</span> <span class=\"searchmatch\">commerce</span> (also referred to as <span class=\"searchmatch\">agent</span>-based <span class=\"searchmatch\">commerce</span>) describes an emerging form of e-<span class=\"searchmatch\">commerce</span> in which autonomous artificial intelligence (AI) agents",
+          "description": "Form of automated electronic commerce"
+        },
+        {
+          "id": 72417803,
+          "key": "ChatGPT",
+          "title": "ChatGPT",
+          "excerpt": "button and open source <span class=\"searchmatch\">Agentic</span> <span class=\"searchmatch\">Commerce</span> Protocol&quot;. Venture Beat. &quot;Buy it in ChatGPT: Instant Checkout and the <span class=\"searchmatch\">Agentic</span> <span class=\"searchmatch\">Commerce</span> Protocol&quot;. Open AI. Retrieved",
+          "description": "Generative AI chatbot by OpenAI"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "title": "__TITLE__ input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "queries": {
+      "title": "__QUERY_LABEL__ (one or more)",
+      "type": "array",
+      "description": "__QUERY_DESCRIPTION__ Pass several to batch them in one run. Either this or \"query\" is required.",
+      "editor": "stringList",
+      "prefill": __QUERY_PREFILL__
+    },
+    "query": {
+      "title": "__QUERY_LABEL__ (single)",
+      "type": "string",
+      "description": "Single-value convenience alias for \"queries\". __QUERY_DESCRIPTION__",
+      "editor": "textfield"
+    },
+    "maxResults": {
+      "title": "Max results",
+      "type": "integer",
+      "description": "Hard cap on results across all queries. Lets an orchestrator bound spend programmatically (you are billed per result).",
+      "default": __DEFAULT_MAX__,
+      "minimum": 1
+    },
+    "includeDescription": {
+      "title": "Include full description text",
+      "type": "boolean",
+      "description": "Include the full long-form description/body for each result. Larger output; same price per result.",
+      "default": false
+    },
+    "keywords": {
+      "title": "Filter: keywords",
+      "type": "array",
+      "description": "Only return results whose title/department/team contains one of these as a whole word (case-insensitive) — \"ai\" matches \"AI Engineer\" but not \"Maintenance\".",
+      "editor": "stringList"
+    },
+    "locations": {
+      "title": "Filter: locations",
+      "type": "array",
+      "description": "Only return results whose location contains one of these strings (case-insensitive).",
+      "editor": "stringList"
+    },
+    "remoteOnly": {
+      "title": "Filter: remote only",
+      "type": "boolean",
+      "description": "Only return results explicitly flagged remote.",
+      "default": false
+    },
+    "postedAfter": {
+      "title": "Filter: posted after (ISO date)",
+      "type": "string",
+      "description": "Only return results posted on/after this ISO date (strictly YYYY-MM-DD, e.g. 2026-01-01; anything else fails the run). Items with no posted date are excluded. Enables incremental/delta scheduled runs.",
+      "editor": "textfield"
+    },
+    "proxyConfiguration": {
+      "title": "Proxy (optional)",
+      "type": "object",
+      "description": "Most sources are public JSON APIs needing no proxy. Configure only if a source geo-restricts.",
+      "editor": "proxy"
+    }
+  }
+}

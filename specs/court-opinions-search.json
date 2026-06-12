@@ -1,0 +1,133 @@
+{
+  "slug": "court-opinions-search",
+  "username": "oblanceolate_mandola",
+  "title": "Court Opinions Search — US Case Law to JSON",
+  "shortDescription": "Search millions of US court opinions by keyword and get case name, court, date, docket number and citation count as JSON at $0.004 per opinion.",
+  "seoTitle": "Court Opinions Search — US Case Law to JSON",
+  "seoDescription": "Court opinions scraper & API: search US case law by keyword for case name, court, date and citation count as JSON. For legal and due-diligence AI agents.",
+  "categories": [
+    "BUSINESS",
+    "NEWS",
+    "AUTOMATION"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.004
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 20
+  },
+  "query": {
+    "label": "Keyword, party, or topic",
+    "description": "Term to search across US court opinions (CourtListener), e.g. a legal topic, party name, or case keyword.",
+    "example": "data privacy",
+    "prefill": [
+      "data privacy"
+    ]
+  },
+  "readme": {
+    "intro": "Case law is where legal precedent and corporate disputes live. This actor turns a keyword into the matching US court opinions from CourtListener, so legal, compliance, and due-diligence agents can read case law as structured data — a natural companion to SEC filings and regulatory documents.",
+    "bullets": [
+      "Search millions of US federal and state court opinions by keyword, party, or topic",
+      "Each result: case name, court, filing date, docket number, citation count, status, opinion URL",
+      "Filter by postedAfter for new-ruling monitoring",
+      "Batch many queries per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with the opinion URL + scrapedAt for citation"
+    ],
+    "sampleOutput": {
+      "query": "data privacy",
+      "source": "courtlistener",
+      "title": "U.S. Office of Pers. Mgmt. Data Sec. Breach Litig.",
+      "court": "Court of Appeals for the D.C. Circuit",
+      "docketNumber": "17-5117",
+      "citeCount": 12,
+      "postedAt": "2019-06-21T00:00:00.000Z",
+      "url": "https://www.courtlistener.com/opinion/4631839/",
+      "sourceUrl": "https://www.courtlistener.com/api/rest/v4/search/?q=data+privacy&type=o",
+      "scrapedAt": "2026-06-12T10:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "What courts are covered?",
+        "a": "US federal and state courts indexed by CourtListener (Free Law Project), spanning millions of opinions."
+      },
+      {
+        "q": "How do I track new rulings?",
+        "a": "Set postedAfter to your last-run date and schedule it for an incremental case-law feed."
+      },
+      {
+        "q": "What is the source?",
+        "a": "The CourtListener API by the Free Law Project — a public, non-profit legal database."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "courtlistener",
+      "urlTemplate": "https://www.courtlistener.com/api/rest/v4/search/?q={query}",
+      "params": {
+        "type": "o"
+      },
+      "itemsPath": "results",
+      "fields": {
+        "jobId": {
+          "path": "cluster_id",
+          "transform": "toString"
+        },
+        "title": "caseName",
+        "court": "court",
+        "docketNumber": "docketNumber",
+        "status": "status",
+        "citeCount": "citeCount",
+        "judge": {
+          "path": "judge",
+          "optional": true
+        },
+        "citation": {
+          "path": "citation",
+          "optional": true
+        },
+        "url": {
+          "path": "absolute_url",
+          "transform": "clUrl"
+        },
+        "postedAt": {
+          "path": "dateFiled",
+          "transform": "toIso"
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "courtlistener": {
+      "results": [
+        {
+          "caseName": "U.S. Office of Pers. Mgmt. Data SEC. Breach Litig. v. Office of Pers. Mgmt.",
+          "court": "Court of Appeals for the D.C. Circuit",
+          "dateFiled": "2019-06-21",
+          "docketNumber": "17-5117",
+          "absolute_url": "/opinion/4631839/us-office-of-pers-mgmt-data-sec-breach-litig-v-office-of-pers-mgmt/",
+          "status": "Published",
+          "citeCount": 83,
+          "judge": "Tatel, Millett, Williams",
+          "cluster_id": 4631839,
+          "citation": [
+            "928 F.3d 42"
+          ]
+        },
+        {
+          "caseName": "California Privacy Protection Agency v. Super. Ct.",
+          "court": "California Court of Appeal",
+          "dateFiled": "2024-02-09",
+          "docketNumber": "C099130",
+          "absolute_url": "/opinion/9474036/california-privacy-protection-agency-v-super-ct/",
+          "status": "Published",
+          "citeCount": 0,
+          "judge": "",
+          "cluster_id": 9474036,
+          "citation": []
+        }
+      ]
+    }
+  }
+}

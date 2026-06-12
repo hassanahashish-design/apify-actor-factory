@@ -1,0 +1,140 @@
+{
+  "slug": "stackoverflow-search",
+  "username": "oblanceolate_mandola",
+  "title": "Stack Overflow Search — Questions to JSON",
+  "shortDescription": "Search Stack Overflow questions by keyword and get title, score, answers, tags, views and URL as JSON — $0.002 per question.",
+  "seoTitle": "Stack Overflow Scraper — Question Search to JSON API (score, tags, answers)",
+  "seoDescription": "Stack Overflow scraper & API: search questions by keyword for score, answers, tags and views as clean JSON. For developer-support and docs AI agents.",
+  "categories": [
+    "DEVELOPER_TOOLS",
+    "AI",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "score",
+    "answers",
+    "tags",
+    "url"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.002
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "Keyword or technology",
+    "description": "Term to search across Stack Overflow questions, e.g. \"rust async\", \"pandas merge\", a library or error message.",
+    "example": "rust async",
+    "prefill": [
+      "rust async"
+    ]
+  },
+  "readme": {
+    "intro": "What developers struggle with on Stack Overflow is a map of where a technology is confusing, broken, or trending. This actor turns a keyword into the matching questions with their scores and answer status, so developer-support, documentation, and dev-tool agents can mine real pain points as structured data.",
+    "bullets": [
+      "Search all Stack Overflow questions by keyword, library, or error",
+      "Each result: title, score, answer count, answered flag, tags, view count, question URL",
+      "Sorted by votes; filter by postedAfter for trend monitoring",
+      "Batch many terms per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with the question URL + scrapedAt for citation"
+    ],
+    "sampleOutput": {
+      "query": "rust async",
+      "source": "stackoverflow",
+      "title": "How does async/await work in Rust?",
+      "score": 145,
+      "answers": 3,
+      "tags": [
+        "rust",
+        "async-await",
+        "rust-tokio"
+      ],
+      "url": "https://stackoverflow.com/questions/...",
+      "sourceUrl": "https://api.stackexchange.com/2.3/search/advanced?q=rust+async",
+      "scrapedAt": "2026-06-11T09:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "Are question titles clean text?",
+        "a": "Yes — HTML entities in titles are decoded so you get readable text."
+      },
+      {
+        "q": "Can I monitor a tag or library over time?",
+        "a": "Yes — search the term and use postedAfter on a schedule to catch new questions."
+      },
+      {
+        "q": "What is the source?",
+        "a": "The official Stack Exchange API for the Stack Overflow site."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "stackoverflow",
+      "urlTemplate": "https://api.stackexchange.com/2.3/search/advanced?q={query}",
+      "params": {
+        "site": "stackoverflow",
+        "order": "desc",
+        "sort": "votes",
+        "pagesize": "50",
+        "filter": "default"
+      },
+      "itemsPath": "items",
+      "fields": {
+        "title": {
+          "path": "title",
+          "transform": "stripHtml"
+        },
+        "score": "score",
+        "answers": "answer_count",
+        "isAnswered": "is_answered",
+        "tags": "tags",
+        "views": "view_count",
+        "url": "link",
+        "postedAt": {
+          "path": "creation_date",
+          "transform": "epochSecToIso"
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "stackoverflow": {
+      "items": [
+        {
+          "title": "How can I perform parallel asynchronous HTTP GET requests with reqwest?",
+          "score": 69,
+          "answer_count": 2,
+          "is_answered": true,
+          "tags": [
+            "rust",
+            "rust-tokio",
+            "reqwest"
+          ],
+          "link": "https://stackoverflow.com/questions/51044467/how-can-i-perform-parallel-asynchronous-http-get-requests-with-reqwest",
+          "creation_date": 1530020780,
+          "view_count": 43923
+        },
+        {
+          "title": "Cannot find tokio::main macro?",
+          "score": 61,
+          "answer_count": 2,
+          "is_answered": true,
+          "tags": [
+            "rust",
+            "async-await",
+            "rust-cargo",
+            "rust-tokio"
+          ],
+          "link": "https://stackoverflow.com/questions/63874178/cannot-find-tokiomain-macro",
+          "creation_date": 1600021621,
+          "view_count": 46990
+        }
+      ]
+    }
+  }
+}

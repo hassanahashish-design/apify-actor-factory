@@ -1,0 +1,128 @@
+{
+  "slug": "github-repo-search",
+  "username": "oblanceolate_mandola",
+  "title": "GitHub Repository Search — Repos to JSON",
+  "shortDescription": "Search GitHub repositories by keyword or qualifier and get stars, language, activity, issues and URL as JSON — $0.003 per repo.",
+  "seoTitle": "GitHub Repo Scraper — Repository Search to JSON API (stars, language, activity)",
+  "seoDescription": "GitHub repository scraper & API: search repos by keyword for stars, language, activity and open issues as clean JSON. For developer and vetting AI agents.",
+  "categories": [
+    "DEVELOPER_TOOLS",
+    "AI",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "stars",
+    "language",
+    "pushedAt",
+    "url"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.003
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "GitHub search query",
+    "description": "A GitHub repository search query — keywords plus optional qualifiers, e.g. \"ai agent\", \"language:rust stars:>1000\", \"topic:rag\".",
+    "example": "ai agent",
+    "prefill": [
+      "ai agent"
+    ]
+  },
+  "readme": {
+    "intro": "Whether you are vetting a dependency, tracking a competitor’s open-source, or finding tools for a build, the signal is in the repo metadata: stars, recency, issue load. This actor turns a GitHub search into structured repo records so developer and research agents can rank and vet repositories without parsing HTML.",
+    "bullets": [
+      "Search GitHub repositories with full query-qualifier support (language:, stars:, topic:, …)",
+      "Each result: full name, description, stars, language, forks, open issues, last-push + created dates, URL",
+      "Filter by keyword/postedAfter; sorted by stars by default",
+      "Batch many queries per run; cap spend with maxResults",
+      "Unauthenticated (no token/setup) — best for targeted searches; large batches may hit GitHub's public rate limit"
+    ],
+    "sampleOutput": {
+      "query": "ai agent",
+      "source": "github",
+      "title": "NousResearch/hermes-agent",
+      "stars": 190459,
+      "language": "Python",
+      "pushedAt": "2026-06-11T09:30:15.000Z",
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "sourceUrl": "https://api.github.com/search/repositories?q=ai+agent",
+      "scrapedAt": "2026-06-11T09:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "Do I need a GitHub account or token?",
+        "a": "No — this actor uses GitHub's public unauthenticated search, so there is no setup. Public search is rate-limited (~10 requests/min), which is plenty for targeted queries; for very large batches, run them in smaller scheduled chunks."
+      },
+      {
+        "q": "Can I use search qualifiers?",
+        "a": "Yes — anything GitHub search supports, e.g. \"language:go stars:>500 pushed:>2026-01-01\"."
+      },
+      {
+        "q": "How are results ordered?",
+        "a": "By stars, descending, so the most prominent repositories come first."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "github",
+      "urlTemplate": "https://api.github.com/search/repositories?q={query}",
+      "params": {
+        "sort": "stars",
+        "order": "desc",
+        "per_page": "50"
+      },
+      "itemsPath": "items",
+      "fields": {
+        "title": "full_name",
+        "description": "description",
+        "stars": "stargazers_count",
+        "language": "language",
+        "forks": "forks_count",
+        "openIssues": "open_issues_count",
+        "postedAt": {
+          "path": "created_at",
+          "transform": "toIso"
+        },
+        "pushedAt": {
+          "path": "pushed_at",
+          "transform": "toIso"
+        },
+        "url": "html_url"
+      }
+    }
+  ],
+  "fixtures": {
+    "github": {
+      "items": [
+        {
+          "full_name": "NousResearch/hermes-agent",
+          "description": "The agent that grows with you",
+          "html_url": "https://github.com/NousResearch/hermes-agent",
+          "stargazers_count": 190460,
+          "language": "Python",
+          "open_issues_count": 19916,
+          "forks_count": 33031,
+          "pushed_at": "2026-06-11T09:30:15Z",
+          "created_at": "2025-07-22T22:22:28Z"
+        },
+        {
+          "full_name": "Snailclimb/JavaGuide",
+          "description": "Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发",
+          "html_url": "https://github.com/Snailclimb/JavaGuide",
+          "stargazers_count": 156308,
+          "language": "JavaScript",
+          "open_issues_count": 57,
+          "forks_count": 46148,
+          "pushed_at": "2026-06-11T01:20:03Z",
+          "created_at": "2018-05-07T13:27:00Z"
+        }
+      ]
+    }
+  }
+}

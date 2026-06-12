@@ -1,0 +1,15 @@
+{
+  "name": "__SLUG__",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "__SHORT_DESCRIPTION__",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "apify": "^3.2.6",
+    "undici": "^6.21.0"
+  }
+}

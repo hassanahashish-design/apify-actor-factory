@@ -1,0 +1,126 @@
+{
+  "slug": "podcast-search",
+  "username": "oblanceolate_mandola",
+  "title": "Podcast Search — Apple Podcasts to JSON",
+  "shortDescription": "Search Apple Podcasts by keyword and get show title, creator, genre, episode count, feed and URL as JSON at $0.002 per result.",
+  "seoTitle": "Podcast Search — Apple Podcasts to JSON",
+  "seoDescription": "Podcast scraper & API: search Apple Podcasts by keyword for title, creator, genre, episode count and RSS feed as JSON. For content-discovery AI agents.",
+  "categories": [
+    "NEWS",
+    "SOCIAL_MEDIA",
+    "AUTOMATION"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.002
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "Keyword or topic",
+    "description": "Term to search across Apple Podcasts, e.g. a topic, show name, or creator.",
+    "example": "technology",
+    "prefill": [
+      "technology"
+    ]
+  },
+  "readme": {
+    "intro": "Podcasts are a fast-growing content and research surface. This actor turns a keyword into the matching shows on Apple Podcasts with their genre, episode count, and RSS feed, so content, research, and marketing agents can discover and analyze podcasts as structured data.",
+    "bullets": [
+      "Search Apple Podcasts by keyword, topic, show, or creator",
+      "Each result: show title, creator, genre, episode count, RSS feed URL, Apple Podcasts URL, latest release date",
+      "The RSS feed URL lets agents fetch full episode lists downstream",
+      "Batch many terms per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with the show URL + scrapedAt for citation"
+    ],
+    "sampleOutput": {
+      "query": "technology",
+      "source": "itunes",
+      "title": "The Future of Everything",
+      "artist": "Stanford Engineering",
+      "genre": "Science",
+      "episodes": 380,
+      "feedUrl": "https://feeds.example.com/future.xml",
+      "url": "https://podcasts.apple.com/us/podcast/id1235836821",
+      "postedAt": "2026-05-29T14:00:00.000Z",
+      "sourceUrl": "https://itunes.apple.com/search?term=technology&entity=podcast",
+      "scrapedAt": "2026-06-12T10:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "Does it return episodes?",
+        "a": "It returns shows with their RSS feed URL; fetch that feed downstream for the full episode list."
+      },
+      {
+        "q": "Is it just podcasts?",
+        "a": "This actor searches Apple Podcasts. The same iTunes Search API also covers apps, music, and audiobooks if you need those."
+      },
+      {
+        "q": "What is the source?",
+        "a": "The public Apple iTunes Search API — no key required."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "itunes",
+      "urlTemplate": "https://itunes.apple.com/search?term={query}",
+      "params": {
+        "entity": "podcast",
+        "limit": "50"
+      },
+      "itemsPath": "results",
+      "fields": {
+        "jobId": {
+          "path": "trackId",
+          "transform": "toString"
+        },
+        "title": "trackName",
+        "artist": "artistName",
+        "genre": "primaryGenreName",
+        "episodes": {
+          "path": "trackCount",
+          "optional": true
+        },
+        "feedUrl": {
+          "path": "feedUrl",
+          "optional": true
+        },
+        "url": "trackViewUrl",
+        "postedAt": {
+          "path": "releaseDate",
+          "transform": "toIso"
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "itunes": {
+      "results": [
+        {
+          "trackName": "The Future of Everything",
+          "artistName": "Stanford Engineering",
+          "kind": "podcast",
+          "primaryGenreName": "Science",
+          "trackViewUrl": "https://podcasts.apple.com/us/podcast/the-future-of-everything/id1235836821?uo=4",
+          "releaseDate": "2026-05-29T14:00:00Z",
+          "trackCount": 380,
+          "trackId": 1235836821,
+          "feedUrl": "https://feeds.simplecast.com/Y8_HoeNW"
+        },
+        {
+          "trackName": "TED Tech",
+          "artistName": "TED Tech",
+          "kind": "podcast",
+          "primaryGenreName": "Technology",
+          "trackViewUrl": "https://podcasts.apple.com/us/podcast/ted-tech/id470624027?uo=4",
+          "releaseDate": "2026-06-05T04:00:00Z",
+          "trackCount": 270,
+          "trackId": 470624027,
+          "feedUrl": "https://feeds.acast.com/public/shows/67585c62102e6d4448d44969"
+        }
+      ]
+    }
+  }
+}

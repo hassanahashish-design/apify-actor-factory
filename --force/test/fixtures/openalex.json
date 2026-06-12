@@ -1,0 +1,64 @@
+{
+ "results": [
+  {
+   "id": "https://openalex.org/W4323655724",
+   "title": "ChatGPT for good? On opportunities and challenges of large language models for education",
+   "publication_year": 2023,
+   "publication_date": "2023-03-09",
+   "cited_by_count": 4943,
+   "doi": "https://doi.org/10.1016/j.lindif.2023.102274",
+   "primary_location": {
+    "source": {
+     "display_name": "Learning and Individual Differences"
+    }
+   },
+   "authorships": [
+    {
+     "author": {
+      "display_name": "Enkelejda Kasneci"
+     }
+    },
+    {
+     "author": {
+      "display_name": "Kathrin Seßler"
+     }
+    },
+    {
+     "author": {
+      "display_name": "Stefan Küchemann"
+     }
+    }
+   ]
+  },
+  {
+   "id": "https://openalex.org/W4384561707",
+   "title": "Large language models in medicine",
+   "publication_year": 2023,
+   "publication_date": "2023-07-17",
+   "cited_by_count": 3252,
+   "doi": "https://doi.org/10.1038/s41591-023-02448-8",
+   "primary_location": {
+    "source": {
+     "display_name": "Nature Medicine"
+    }
+   },
+   "authorships": [
+    {
+     "author": {
+      "display_name": "Arun James Thirunavukarasu"
+     }
+    },
+    {
+     "author": {
+      "display_name": "Darren Shu Jeng Ting"
+     }
+    },
+    {
+     "author": {
+      "display_name": "Kabilan Elangovan"
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+  "slug": "hacker-news-monitor",
+  "sourceMode": "firstHit",
+  "queryNormalize": null,
+  "sources": [
+    {
+      "id": "hackernews",
+      "urlTemplate": "https://hn.algolia.com/api/v1/search?query={query}",
+      "params": {
+        "tags": "story",
+        "hitsPerPage": "50"
+      },
+      "itemsPath": "hits",
+      "fields": {
+        "jobId": "objectID",
+        "title": "title",
+        "url": "url",
+        "author": "author",
+        "points": "points",
+        "comments": "num_comments",
+        "postedAt": {
+          "path": "created_at",
+          "transform": "toIso"
+        }
+      }
+    }
+  ],
+  "defaults": {
+    "maxResults": 100
+  },
+  "example": {
+    "query": "anthropic"
+  }
+}

@@ -1,0 +1,38 @@
+[
+ {
+  "categories": {
+   "commitment": "Full-time",
+   "location": "Palo Alto, CA",
+   "team": "Administrative",
+   "allLocations": [
+    "Palo Alto, CA"
+   ]
+  },
+  "createdAt": 1778622524938,
+  "descriptionPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bringing the right data to the people who need it, our platforms empower our partne",
+  "id": "0bbfd4f4-41ff-4ec6-b73f-5200efd5d4d3",
+  "text": "Administrative Business Partner - Security",
+  "country": "US",
+  "workplaceType": "hybrid",
+  "hostedUrl": "https://jobs.lever.co/palantir/0bbfd4f4-41ff-4ec6-b73f-5200efd5d4d3",
+  "applyUrl": "https://jobs.lever.co/palantir/0bbfd4f4-41ff-4ec6-b73f-5200efd5d4d3/apply"
+ },
+ {
+  "categories": {
+   "commitment": "Full-time",
+   "location": "New York, NY",
+   "team": "Administrative",
+   "allLocations": [
+    "New York, NY"
+   ]
+  },
+  "createdAt": 1772551058051,
+  "descriptionPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bringing the right data to the people who need it, our platforms empower our partne",
+  "id": "fe2a8c69-49b7-405f-816c-a6c6f894399a",
+  "text": "Administrative Business Partner - Security",
+  "country": "US",
+  "workplaceType": "hybrid",
+  "hostedUrl": "https://jobs.lever.co/palantir/fe2a8c69-49b7-405f-816c-a6c6f894399a",
+  "applyUrl": "https://jobs.lever.co/palantir/fe2a8c69-49b7-405f-816c-a6c6f894399a/apply"
+ }
+]

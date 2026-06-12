@@ -1,0 +1,699 @@
+{
+  "slug": "company-hiring-signals",
+  "username": "oblanceolate_mandola",
+  "title": "Company Hiring Signals — Job Postings to JSON",
+  "shortDescription": "Scrape job postings from any company on Greenhouse, Lever or Ashby by company name — hiring signals as clean JSON at $0.002 per posting.",
+  "seoTitle": "Job Postings Scraper — Company Hiring Signals to JSON (Greenhouse, Lever, Ashby)",
+  "seoDescription": "Hiring signals & job postings API: scrape live jobs from Greenhouse, Lever and Ashby by company name as JSON. For sales-intel AI agents. Pay per result.",
+  "categories": [
+    "JOBS",
+    "BUSINESS",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "department",
+    "location",
+    "remote",
+    "postedAt",
+    "url"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.002
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 1000
+  },
+  "query": {
+    "label": "Company",
+    "description": "Company slug as used on its job board, e.g. \"stripe\" (boards.greenhouse.io/stripe), \"palantir\" (jobs.lever.co/palantir), \"openai\" (jobs.ashbyhq.com/openai). Case-insensitive; must be the URL identifier, not the display name (\"Stripe, Inc.\" will not match).",
+    "example": "stripe",
+    "prefill": [
+      "stripe",
+      "openai",
+      "palantir"
+    ],
+    "normalize": "slug"
+  },
+  "readme": {
+    "intro": "A company opening new roles is a buying signal: budget exists, growth is happening, tools are being bought. This actor turns any company name into its live job postings — normalized across the three most common tech ATS platforms (Greenhouse, Lever, Ashby) — so sales-intelligence agents, recruiting agents and research pipelines can read hiring activity as structured data. It reads each platform's public job-board API directly: no browser, no proxies, no scraping fragility, results in seconds.",
+    "bullets": [
+      "Look up live job postings for any company hosted on Greenhouse, Lever or Ashby — auto-detected, one unified output shape",
+      "Hiring-signal fields: title, department, team, location(s), remote flag, employment type, compensation (when published), posted date",
+      "Filter by keywords, location, remote-only, or postedAfter for incremental scheduled runs (only new postings since last run)",
+      "Batch many companies in one run; cap spend with maxResults",
+      "Built for agents: flat JSON, sourceUrl + scrapedAt on every item for citation, callable via MCP and the Apify API"
+    ],
+    "sampleOutput": {
+      "query": "stripe",
+      "source": "greenhouse",
+      "title": "Account Executive, AI Sales",
+      "department": "Sales",
+      "team": null,
+      "location": "San Francisco, CA",
+      "locations": null,
+      "remote": false,
+      "employmentType": null,
+      "compensation": null,
+      "postedAt": "2026-06-02T14:01:00.000Z",
+      "url": "https://stripe.com/jobs/search?gh_jid=7964697",
+      "sourceUrl": "https://boards-api.greenhouse.io/v1/boards/stripe/jobs",
+      "scrapedAt": "2026-06-10T15:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "How do I find a company's slug?",
+        "a": "Use the identifier in its job-board URL: boards.greenhouse.io/**stripe**, jobs.lever.co/**palantir**, jobs.ashbyhq.com/**openai**. Pass that word as the query. The actor auto-detects which of the three platforms the company uses."
+      },
+      {
+        "q": "What if a company is not on Greenhouse, Lever, or Ashby?",
+        "a": "You get zero results for that company and are charged nothing. Many large enterprises use Workday or Taleo, which this actor does not cover in v1."
+      },
+      {
+        "q": "How do I get only new postings since my last run?",
+        "a": "Set postedAfter to your last run date (e.g. 2026-06-01). Combined with a scheduled run, this gives you an incremental hiring-signal feed."
+      },
+      {
+        "q": "Do I pay for companies that return no jobs?",
+        "a": "No. You only pay for successful results — one charge per job posting actually returned."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "greenhouse",
+      "urlTemplate": "https://boards-api.greenhouse.io/v1/boards/{query}/jobs",
+      "descriptionParam": "?content=true",
+      "itemsPath": "jobs",
+      "fields": {
+        "jobId": {
+          "path": "id",
+          "transform": "toString"
+        },
+        "title": "title",
+        "department": "departments.0.name",
+        "team": {
+          "path": "metadata.team",
+          "optional": true
+        },
+        "location": "location.name",
+        "remote": {
+          "path": "location.name",
+          "transform": "boolRemote"
+        },
+        "employmentType": {
+          "path": "metadata.employment_type",
+          "optional": true
+        },
+        "compensation": {
+          "path": "metadata.compensation",
+          "optional": true
+        },
+        "postedAt": {
+          "path": "first_published",
+          "transform": "toIso"
+        },
+        "updatedAt": {
+          "path": "updated_at",
+          "transform": "toIso"
+        },
+        "url": "absolute_url",
+        "description": {
+          "path": "content",
+          "transform": "stripHtml"
+        }
+      }
+    },
+    {
+      "id": "lever",
+      "urlTemplate": "https://api.lever.co/v0/postings/{query}?mode=json",
+      "itemsPath": "",
+      "fields": {
+        "jobId": "id",
+        "title": "text",
+        "department": {
+          "path": "categories.department",
+          "optional": true
+        },
+        "team": {
+          "path": "categories.team",
+          "optional": true
+        },
+        "location": "categories.location",
+        "remote": {
+          "path": "workplaceType",
+          "transform": "boolRemote"
+        },
+        "employmentType": "categories.commitment",
+        "compensation": {
+          "path": "salaryRange.max",
+          "optional": true
+        },
+        "postedAt": {
+          "path": "createdAt",
+          "transform": "toIso"
+        },
+        "url": "hostedUrl",
+        "description": {
+          "path": "descriptionPlain",
+          "transform": "trim"
+        }
+      }
+    },
+    {
+      "id": "ashby",
+      "urlTemplate": "https://api.ashbyhq.com/posting-api/job-board/{query}?includeCompensation=true",
+      "itemsPath": "jobs",
+      "fields": {
+        "jobId": "id",
+        "title": "title",
+        "department": "department",
+        "team": {
+          "path": "team",
+          "optional": true
+        },
+        "location": "location",
+        "remote": "isRemote",
+        "employmentType": "employmentType",
+        "compensation": {
+          "path": "compensation.compensationTierSummary",
+          "optional": true
+        },
+        "postedAt": {
+          "path": "publishedAt",
+          "transform": "toIso"
+        },
+        "url": "jobUrl",
+        "description": {
+          "path": "descriptionPlain",
+          "transform": "trim"
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "greenhouse": {
+      "jobs": [
+        {
+          "absolute_url": "https://stripe.com/jobs/search?gh_jid=7964697",
+          "data_compliance": [
+            {
+              "type": "gdpr",
+              "requires_consent": false,
+              "requires_processing_consent": false,
+              "requires_retention_consent": false,
+              "retention_period": null,
+              "demographic_data_consent_applies": false
+            }
+          ],
+          "internal_job_id": 3457909,
+          "location": {
+            "name": "San Francisco, CA"
+          },
+          "metadata": null,
+          "id": 7964697,
+          "updated_at": "2026-06-05T15:44:04-04:00",
+          "requisition_id": "See Opening ID",
+          "title": "Account Executive, AI Sales",
+          "company_name": "Stripe",
+          "first_published": "2026-06-02T11:35:23-04:00",
+          "language": "en",
+          "application_deadline": null,
+          "content": "&lt;h2&gt;Who we are&lt;/h2&gt;\n&lt;h3&gt;About Stripe&lt;/h3&gt;\n&lt;p&gt;Stripe is a financial infrastructure platform for businesses. Millions of companies—from the world’s larg",
+          "departments": [
+            {
+              "id": 295360,
+              "name": "1650 AI GTM Strategy & Solutions",
+              "child_ids": [],
+              "parent_id": 297997
+            }
+          ],
+          "offices": [
+            {
+              "id": 65234,
+              "name": "US",
+              "location": null,
+              "child_ids": [
+                89623,
+                249942,
+                249943,
+                230657,
+                61413,
+                80440,
+                344486,
+                83778,
+                61414,
+                83767,
+                83768,
+                83776,
+                83769,
+                83770,
+                83771,
+                83772,
+                83773,
+                83774,
+                89624,
+                83789,
+                83775,
+                83777,
+                83779,
+                83780,
+                83820,
+                83781,
+                83782,
+                83783,
+                83784,
+                83785,
+                83786,
+                83787,
+                83821,
+                83788,
+                83790,
+                83791,
+                83792,
+                83793,
+                83794,
+                83854,
+                83861,
+                83795,
+                83796,
+                83797,
+                83831,
+                83798,
+                83799,
+                83856,
+                83800,
+                83801,
+                83819,
+                83802,
+                83850,
+                83803,
+                83804,
+                83805,
+                83806,
+                83807,
+                83808,
+                83809,
+                83810,
+                83811,
+                83812,
+                83813,
+                83815,
+                83817,
+                83822,
+                83824,
+                83846,
+                83825,
+                83829,
+                83830,
+                65238,
+                83834,
+                83849,
+                83859,
+                83835,
+                83836,
+                83837,
+                83839,
+                83840,
+                83841,
+                83842,
+                83843,
+                83844,
+                83847,
+                83848,
+                83851,
+                83852,
+                83853,
+                83855,
+                83857,
+                83858,
+                83860,
+                83862,
+                83814,
+                83818,
+                83823,
+                83826,
+                83827,
+                83828,
+                83832,
+                83833,
+                83816,
+                85342,
+                83838,
+                83845,
+                223073,
+                265365,
+                16654
+              ],
+              "parent_id": 673
+            }
+          ]
+        },
+        {
+          "absolute_url": "https://stripe.com/jobs/search?gh_jid=7954688",
+          "data_compliance": [
+            {
+              "type": "gdpr",
+              "requires_consent": false,
+              "requires_processing_consent": false,
+              "requires_retention_consent": false,
+              "retention_period": null,
+              "demographic_data_consent_applies": false
+            }
+          ],
+          "internal_job_id": 3453698,
+          "location": {
+            "name": "San Francisco, CA"
+          },
+          "metadata": null,
+          "id": 7954688,
+          "updated_at": "2026-06-02T08:58:57-04:00",
+          "requisition_id": "See Opening ID",
+          "title": "Account Executive, AI Sales (Grower)",
+          "company_name": "Stripe",
+          "first_published": "2026-06-02T08:58:57-04:00",
+          "language": "en",
+          "application_deadline": null,
+          "content": "&lt;h2&gt;Who we are&lt;/h2&gt;\n&lt;h3&gt;About Stripe&lt;/h3&gt;\n&lt;p&gt;Stripe is a financial infrastructure platform for businesses. Millions of companies - from the world’s la",
+          "departments": [
+            {
+              "id": 295360,
+              "name": "1650 AI GTM Strategy & Solutions",
+              "child_ids": [],
+              "parent_id": 297997
+            }
+          ],
+          "offices": [
+            {
+              "id": 65234,
+              "name": "US",
+              "location": null,
+              "child_ids": [
+                89623,
+                249942,
+                249943,
+                230657,
+                61413,
+                80440,
+                344486,
+                83778,
+                61414,
+                83767,
+                83768,
+                83776,
+                83769,
+                83770,
+                83771,
+                83772,
+                83773,
+                83774,
+                89624,
+                83789,
+                83775,
+                83777,
+                83779,
+                83780,
+                83820,
+                83781,
+                83782,
+                83783,
+                83784,
+                83785,
+                83786,
+                83787,
+                83821,
+                83788,
+                83790,
+                83791,
+                83792,
+                83793,
+                83794,
+                83854,
+                83861,
+                83795,
+                83796,
+                83797,
+                83831,
+                83798,
+                83799,
+                83856,
+                83800,
+                83801,
+                83819,
+                83802,
+                83850,
+                83803,
+                83804,
+                83805,
+                83806,
+                83807,
+                83808,
+                83809,
+                83810,
+                83811,
+                83812,
+                83813,
+                83815,
+                83817,
+                83822,
+                83824,
+                83846,
+                83825,
+                83829,
+                83830,
+                65238,
+                83834,
+                83849,
+                83859,
+                83835,
+                83836,
+                83837,
+                83839,
+                83840,
+                83841,
+                83842,
+                83843,
+                83844,
+                83847,
+                83848,
+                83851,
+                83852,
+                83853,
+                83855,
+                83857,
+                83858,
+                83860,
+                83862,
+                83814,
+                83818,
+                83823,
+                83826,
+                83827,
+                83828,
+                83832,
+                83833,
+                83816,
+                85342,
+                83838,
+                83845,
+                223073,
+                265365,
+                16654
+              ],
+              "parent_id": 673
+            }
+          ]
+        }
+      ]
+    },
+    "lever": [
+      {
+        "categories": {
+          "commitment": "Full-time",
+          "location": "Palo Alto, CA",
+          "team": "Administrative",
+          "allLocations": [
+            "Palo Alto, CA"
+          ]
+        },
+        "createdAt": 1778622524938,
+        "descriptionPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bringing the right data to the people who need it, our platforms empower our partne",
+        "id": "0bbfd4f4-41ff-4ec6-b73f-5200efd5d4d3",
+        "text": "Administrative Business Partner - Security",
+        "country": "US",
+        "workplaceType": "hybrid",
+        "hostedUrl": "https://jobs.lever.co/palantir/0bbfd4f4-41ff-4ec6-b73f-5200efd5d4d3",
+        "applyUrl": "https://jobs.lever.co/palantir/0bbfd4f4-41ff-4ec6-b73f-5200efd5d4d3/apply"
+      },
+      {
+        "categories": {
+          "commitment": "Full-time",
+          "location": "New York, NY",
+          "team": "Administrative",
+          "allLocations": [
+            "New York, NY"
+          ]
+        },
+        "createdAt": 1772551058051,
+        "descriptionPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bringing the right data to the people who need it, our platforms empower our partne",
+        "id": "fe2a8c69-49b7-405f-816c-a6c6f894399a",
+        "text": "Administrative Business Partner - Security",
+        "country": "US",
+        "workplaceType": "hybrid",
+        "hostedUrl": "https://jobs.lever.co/palantir/fe2a8c69-49b7-405f-816c-a6c6f894399a",
+        "applyUrl": "https://jobs.lever.co/palantir/fe2a8c69-49b7-405f-816c-a6c6f894399a/apply"
+      }
+    ],
+    "ashby": {
+      "jobs": [
+        {
+          "id": "8fb1615c-34bf-47c4-a1d1-b7b2f836bbd3",
+          "title": "Technical Program Manager, Compute Infrastructure",
+          "department": "Technical Program Management",
+          "team": "Technical Program Management",
+          "employmentType": "FullTime",
+          "location": "San Francisco",
+          "shouldDisplayCompensationOnJobPostings": true,
+          "secondaryLocations": [],
+          "publishedAt": "2026-03-12T16:38:15.322+00:00",
+          "isListed": true,
+          "isRemote": null,
+          "workplaceType": null,
+          "address": {
+            "postalAddress": {
+              "addressRegion": "California",
+              "addressCountry": "United States",
+              "addressLocality": "San Francisco"
+            }
+          },
+          "jobUrl": "https://jobs.ashbyhq.com/openai/8fb1615c-34bf-47c4-a1d1-b7b2f836bbd3",
+          "applyUrl": "https://jobs.ashbyhq.com/openai/8fb1615c-34bf-47c4-a1d1-b7b2f836bbd3/application",
+          "descriptionPlain": "ABOUT THE TEAM\n\nThe compute infrastructure team runs the GPU fleet and large-scale compute clusters that serve the models backing ChatGPT and the API, while also supporting training workloads for our ",
+          "compensation": {
+            "compensationTierSummary": "$257K – $335K • Offers Equity",
+            "scrapeableCompensationSalarySummary": "$257K - $335K",
+            "compensationTiers": [
+              {
+                "id": "33e464a3-4ff9-40a4-bbd6-6dcb65d23c43",
+                "tierSummary": "$257K – $335K • Offers Equity",
+                "title": null,
+                "additionalInformation": null,
+                "components": [
+                  {
+                    "id": "daa3a561-a504-4bd5-99ac-3ed7fd060cf8",
+                    "summary": "$257K – $335K",
+                    "compensationType": "Salary",
+                    "interval": "1 YEAR",
+                    "currencyCode": "USD",
+                    "minValue": 257000,
+                    "maxValue": 335000
+                  },
+                  {
+                    "id": "ae7ec4d0-7ec6-4186-b4c2-e4b6753df9e7",
+                    "summary": "Offers Equity",
+                    "compensationType": "EquityCashValue",
+                    "interval": "1 YEAR",
+                    "currencyCode": "USD",
+                    "minValue": null,
+                    "maxValue": null
+                  }
+                ]
+              }
+            ],
+            "summaryComponents": [
+              {
+                "compensationType": "Salary",
+                "interval": "1 YEAR",
+                "currencyCode": "USD",
+                "minValue": 257000,
+                "maxValue": 335000
+              },
+              {
+                "compensationType": "EquityCashValue",
+                "interval": "1 YEAR",
+                "currencyCode": "USD",
+                "minValue": null,
+                "maxValue": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "240d459b-696d-43eb-8497-fab3e56ecd9b",
+          "title": "Research Engineer",
+          "department": "Research",
+          "team": "Research",
+          "employmentType": "FullTime",
+          "location": "San Francisco",
+          "shouldDisplayCompensationOnJobPostings": true,
+          "secondaryLocations": [],
+          "publishedAt": "2025-04-05T00:03:20.653+00:00",
+          "isListed": true,
+          "isRemote": null,
+          "workplaceType": null,
+          "address": {
+            "postalAddress": {
+              "addressRegion": "California",
+              "addressCountry": "United States",
+              "addressLocality": "San Francisco"
+            }
+          },
+          "jobUrl": "https://jobs.ashbyhq.com/openai/240d459b-696d-43eb-8497-fab3e56ecd9b",
+          "applyUrl": "https://jobs.ashbyhq.com/openai/240d459b-696d-43eb-8497-fab3e56ecd9b/application",
+          "descriptionPlain": "By applying to this role, you will be considered for Research Engineer roles across all teams at OpenAI.\n\nAbout the Role\n\nAs a Research Engineer here, you will be responsible for building AI systems t",
+          "compensation": {
+            "compensationTierSummary": "$250K – $445K • Offers Equity",
+            "scrapeableCompensationSalarySummary": "$250K - $445K",
+            "compensationTiers": [
+              {
+                "id": "4747585e-c075-4d8e-8107-8903aa77f4a9",
+                "tierSummary": "$250K – $445K • Offers Equity",
+                "title": null,
+                "additionalInformation": null,
+                "components": [
+                  {
+                    "id": "c2046721-f7e5-4b2c-bf4e-aec9500cc38d",
+                    "summary": "Offers Equity",
+                    "compensationType": "EquityCashValue",
+                    "interval": "1 YEAR",
+                    "currencyCode": "USD",
+                    "minValue": null,
+                    "maxValue": null
+                  },
+                  {
+                    "id": "2e7143d4-d113-4484-94c8-9ce25f4d402c",
+                    "summary": "$250K – $445K",
+                    "compensationType": "Salary",
+                    "interval": "1 YEAR",
+                    "currencyCode": "USD",
+                    "minValue": 250000,
+                    "maxValue": 445000
+                  }
+                ]
+              }
+            ],
+            "summaryComponents": [
+              {
+                "compensationType": "EquityCashValue",
+                "interval": "1 YEAR",
+                "currencyCode": "USD",
+                "minValue": null,
+                "maxValue": null
+              },
+              {
+                "compensationType": "Salary",
+                "interval": "1 YEAR",
+                "currencyCode": "USD",
+                "minValue": 250000,
+                "maxValue": 445000
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "jobsFilters": true
+}

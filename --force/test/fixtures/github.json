@@ -1,0 +1,26 @@
+{
+ "items": [
+  {
+   "full_name": "NousResearch/hermes-agent",
+   "description": "The agent that grows with you",
+   "html_url": "https://github.com/NousResearch/hermes-agent",
+   "stargazers_count": 190460,
+   "language": "Python",
+   "open_issues_count": 19916,
+   "forks_count": 33031,
+   "pushed_at": "2026-06-11T09:30:15Z",
+   "created_at": "2025-07-22T22:22:28Z"
+  },
+  {
+   "full_name": "Snailclimb/JavaGuide",
+   "description": "Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发",
+   "html_url": "https://github.com/Snailclimb/JavaGuide",
+   "stargazers_count": 156308,
+   "language": "JavaScript",
+   "open_issues_count": 57,
+   "forks_count": 46148,
+   "pushed_at": "2026-06-11T01:20:03Z",
+   "created_at": "2018-05-07T13:27:00Z"
+  }
+ ]
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Actor factory — business dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#FAF9F5; --surface:#FFFFFF; --muted:#F1EFE8;
+    --text:#2C2C2A; --text2:#5F5E5A; --text3:#888780;
+    --border:rgba(0,0,0,0.12);
+    --teal:#5DCAA5; --teal-d:#085041; --teal-bg:#E1F5EE;
+    --amber:#FAC775; --amber-d:#633806; --amber-bg:#FAEEDA;
+    --red-d:#A32D2D; --purple:#534AB7; --green:#0F6E56;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 -apple-system,"Segoe UI",Roboto,sans-serif;padding:40px 20px}
+  .wrap{max-width:860px;margin:0 auto}
+  h1{font-size:24px;font-weight:600;margin:0 0 4px}
+  .sub{color:var(--text3);font-size:14px;margin:0 0 28px}
+  h2{font-size:15px;font-weight:600;color:var(--text2);margin:0 0 14px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+  .metric{background:var(--muted);border-radius:10px;padding:16px}
+  .metric p{margin:0}
+  .metric .lbl{font-size:13px;color:var(--text2)}
+  .metric .val{font-size:26px;font-weight:600}
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+  .actor{margin-bottom:18px}
+  .actor:last-child{margin-bottom:0}
+  .ahead{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .aname{font-weight:600;font-size:15px}
+  .badge{font-size:12px;padding:2px 10px;border-radius:8px;white-space:nowrap}
+  .b-teal{background:var(--teal-bg);color:var(--teal-d)}
+  .b-amber{background:var(--amber-bg);color:var(--amber-d)}
+  .b-gray{background:var(--muted);color:var(--text2)}
+  .track{display:flex;gap:4px}
+  .seg{flex:1;text-align:center}
+  .bar{height:7px;border-radius:4px;background:var(--muted)}
+  .done .bar{background:var(--teal)}
+  .next .bar{background:var(--amber)}
+  .seg span{font-size:11px;color:var(--text3)}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-bottom:16px}
+  table{width:100%;font-size:14px;border-collapse:collapse}
+  td{padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05)}
+  tr:last-child td{border-bottom:none}
+  td.r{text-align:right;color:var(--text3);font-size:13px}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--muted);color:var(--text2);font-size:12px;font-weight:600;margin-right:10px;flex:none}
+  .stage{display:flex;gap:0;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(0,0,0,0.05)}
+  .stage:last-child{border-bottom:none}
+  .stage b{font-weight:600;font-size:14px}
+  .stage p{margin:2px 0 0;font-size:13px;color:var(--text2)}
+  .tag{font-size:11px;padding:1px 8px;border-radius:6px;margin-left:8px;vertical-align:1px}
+  a{color:#185FA5;text-decoration:none}
+  a:hover{text-decoration:underline}
+  .links a{display:inline-block;margin:0 14px 6px 0;font-size:14px}
+  .red{color:var(--red-d)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Actor factory — business dashboard</h1>
+  <p class="sub">Snapshot generated 10 June 2026 · account: oblanceolate_mandola · everything below the "human steps" card runs without you</p>
+
+  <div class="cards">
+    <div class="metric"><p class="lbl">Actors built</p><p class="val">3</p></div>
+    <div class="metric"><p class="lbl">Live and earning</p><p class="val">0</p></div>
+    <div class="metric"><p class="lbl">In pipeline</p><p class="val">2</p></div>
+    <div class="metric"><p class="lbl">Human steps left</p><p class="val">4</p></div>
+  </div>
+
+  <div class="panel">
+    <h2>Pipeline — stage progress per actor</h2>
+
+    <div class="actor">
+      <div class="ahead">
+        <span class="aname">company-hiring-signals</span>
+        <span class="badge b-teal">next: push</span>
+        <span style="font-size:12px;color:var(--text3)">job postings from Greenhouse / Lever / Ashby · $0.002 per result</span>
+      </div>
+      <div class="track">
+        <div class="seg done"><div class="bar"></div><span>spec</span></div>
+        <div class="seg done"><div class="bar"></div><span>scaffold</span></div>
+        <div class="seg done"><div class="bar"></div><span>tests 10/10</span></div>
+        <div class="seg done"><div class="bar"></div><span>local smoke</span></div>
+        <div class="seg next"><div class="bar"></div><span>push</span></div>
+        <div class="seg"><div class="bar"></div><span>price + publish</span></div>
+        <div class="seg"><div class="bar"></div><span>earning</span></div>
+      </div>
+    </div>
+
+    <div class="actor">
+      <div class="ahead">
+        <span class="aname">uae-business-verify</span>
+        <span class="badge b-amber">parked — data credential</span>
+        <span style="font-size:12px;color:var(--text3)">Dubai DED license verification · $0.05 per lookup · flagship moat</span>
+      </div>
+      <div class="track">
+        <div class="seg done"><div class="bar"></div><span>built</span></div>
+        <div class="seg done"><div class="bar"></div><span>bug-hunt: 13 fixed</span></div>
+        <div class="seg done"><div class="bar"></div><span>tests 21/21</span></div>
+        <div class="seg done"><div class="bar"></div><span>pushed</span></div>
+        <div class="seg next"><div class="bar"></div><span>live smoke</span></div>
+        <div class="seg"><div class="bar"></div><span>price + publish</span></div>
+        <div class="seg"><div class="bar"></div><span>earning</span></div>
+      </div>
+    </div>
+
+    <div class="actor">
+      <div class="ahead">
+        <span class="aname" style="color:var(--text2)">job-postings-scraper</span>
+        <span class="badge b-gray">superseded — reference only</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel" style="margin:0">
+      <h2>Your 4 remaining human steps</h2>
+      <table>
+        <tr><td class="red">1. Rotate Apify token (<a href="https://console.apify.com/settings/integrations">Console → API &amp; Integrations</a>)</td><td class="r">2 min · security</td></tr>
+        <tr><td>2. Dubai Pulse signup — needs UAE IP (phone on UAE SIM)</td><td class="r">5 min · unparks flagship</td></tr>
+        <tr><td>3. Console: set pay-per-event price + Publish to Store</td><td class="r">2 clicks per actor</td></tr>
+        <tr><td>4. Payout details + KYC</td><td class="r">before first payout</td></tr>
+      </table>
+    </div>
+    <div class="panel" style="margin:0">
+      <h2>Automated once live — the loop</h2>
+      <table>
+        <tr><td>1. Agent discovers the actor via MCP / Store search</td></tr>
+        <tr><td>2. Calls it — engine fetches sources, normalizes, filters</td></tr>
+        <tr><td>3. Charged per successful result · 80% share is yours</td></tr>
+        <tr><td>4. Monitor script catches breakage on schedule</td></tr>
+        <tr><td>5. Apify pays out monthly (invoice on the 11th)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>The factory pipeline — how every new actor gets made (PLAYBOOK.md)</h2>
+    <div class="stage"><span class="num">0</span><div><b>Decision protocol</b><span class="tag b-gray">judgment</span><p>≥3 candidate niches incl. one contrarian → attack each as harshest critic → live-verify the decisive variable → confidence + switch-trigger.</p></div></div>
+    <div class="stage"><span class="num">1</span><div><b>Moat gate</b><span class="tag b-gray">judgment</span><p>Kill unless: DIY-resistant, not open-to-everyone without a differentiation layer, &lt;3 store incumbents (live API check), stable + legal source probed from the platform runtime.</p></div></div>
+    <div class="stage"><span class="num">2</span><div><b>Spec, not code</b><span class="tag b-gray">judgment</span><p>One declarative JSON spec (SPEC.md contract) + real captured fixtures. Provisional competitor-anchored price.</p></div></div>
+    <div class="stage"><span class="num">3</span><div><b>Scaffold + offline tests</b><span class="tag b-teal">script</span><p>new-actor.mjs: same spec in, same tested actor out. Refuses to clobber existing actors.</p></div></div>
+    <div class="stage"><span class="num">4</span><div><b>Adversarial bug-hunt</b><span class="tag b-gray">judgment</span><p>Fresh-eyes agent runs probes; CONFIRMED vs SUSPECTED; sweeps the known bug-class list; regression test per fix.</p></div></div>
+    <div class="stage"><span class="num">5</span><div><b>Push + live smoke run</b><span class="tag b-teal">script</span><p>Deploy, run on platform with real input, read actual output. 3 failed fixes → PARKED with named blocker.</p></div></div>
+    <div class="stage"><span class="num">6</span><div><b>Listing (AEO)</b><span class="tag b-gray">judgment</span><p>Literal task keywords, sample JSON up front, "you only pay for successful results", MCP/API snippets, FAQ. Re-tuned each major model release.</p></div></div>
+    <div class="stage"><span class="num">7</span><div><b>Pricing</b><span class="tag b-teal">formula</span><p>price = max(3 × measured compute floor, 0.7 × cheapest credible anchor); no anchor → 5 × floor.</p></div></div>
+    <div class="stage"><span class="num">8</span><div><b>Portfolio monitor</b><span class="tag b-teal">script</span><p>monitor.mjs runs every published actor against its canary on a schedule — breakage found before customers find it.</p></div></div>
+  </div>
+
+  <div class="panel links">
+    <h2>Quick links</h2>
+    <a href="https://console.apify.com/actors/development">Apify Console — my actors</a>
+    <a href="https://console.apify.com/settings/integrations">Rotate API token</a>
+    <a href="https://console.apify.com/billing">Billing / payouts</a>
+    <a href="https://www.dubaipulse.gov.ae/data/ded-licenses/ded_license_master-open">Dubai Pulse dataset (needs UAE IP)</a>
+    <a href="https://apify.com/store">Apify Store</a>
+  </div>
+</div>
+</body>
+</html>

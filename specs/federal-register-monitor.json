@@ -1,0 +1,137 @@
+{
+  "slug": "federal-register-monitor",
+  "username": "oblanceolate_mandola",
+  "title": "Federal Register Monitor — US Regulations to JSON",
+  "shortDescription": "Search the US Federal Register for rules, notices and executive orders by keyword and get title, agency, type, date and URL as JSON — $0.004 per document.",
+  "seoTitle": "Federal Register Scraper — US Regulation & Rule Search to JSON API",
+  "seoDescription": "Federal Register scraper & API: search US regulations and rules by keyword for agency, type and date as JSON. For compliance and policy AI agents.",
+  "categories": [
+    "NEWS",
+    "BUSINESS",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "docType",
+    "agency",
+    "postedAt",
+    "url"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.004
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "Keyword or topic",
+    "description": "Term to search across US Federal Register documents, e.g. \"artificial intelligence\", \"data privacy\", an agency or program name.",
+    "example": "artificial intelligence",
+    "prefill": [
+      "artificial intelligence"
+    ]
+  },
+  "readme": {
+    "intro": "New US regulations, proposed rules, and executive orders all land in the Federal Register first. This actor turns a keyword into the matching documents, so compliance, policy, and legal agents can monitor the regulatory pipeline as structured data — a natural companion to corporate filings.",
+    "bullets": [
+      "Search every US Federal Register document by keyword or agency",
+      "Each result: title, document type (rule/proposed rule/notice), issuing agency, publication date, official URL, abstract",
+      "Filter by postedAfter for a daily regulatory-change feed",
+      "Batch many topics per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with the official html_url + scrapedAt for citation"
+    ],
+    "sampleOutput": {
+      "query": "artificial intelligence",
+      "source": "federal_register",
+      "title": "Advancing American AI",
+      "docType": "Presidential Document",
+      "agency": [
+        "Executive Office of the President"
+      ],
+      "postedAt": "2026-01-15T00:00:00.000Z",
+      "url": "https://www.federalregister.gov/documents/...",
+      "sourceUrl": "https://www.federalregister.gov/api/v1/documents.json?conditions[term]=artificial+intelligence",
+      "scrapedAt": "2026-06-11T09:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "What document types are covered?",
+        "a": "Rules, proposed rules, notices, and presidential documents — everything published in the daily Federal Register."
+      },
+      {
+        "q": "How do I track new regulations?",
+        "a": "Set postedAfter to your last-run date and schedule it for an incremental regulatory feed."
+      },
+      {
+        "q": "Is the data official?",
+        "a": "Yes — it comes from the official Federal Register API (federalregister.gov); each result links to the canonical document."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "federal_register",
+      "urlTemplate": "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D={query}",
+      "params": {
+        "per_page": "50",
+        "order": "newest"
+      },
+      "itemsPath": "results",
+      "fields": {
+        "jobId": "document_number",
+        "title": "title",
+        "docType": "type",
+        "agency": {
+          "path": "agencies",
+          "transform": "pluckNames"
+        },
+        "url": "html_url",
+        "abstract": {
+          "path": "abstract",
+          "optional": true
+        },
+        "postedAt": {
+          "path": "publication_date",
+          "transform": "toIso"
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "federal_register": {
+      "results": [
+        {
+          "document_number": "2026-10779",
+          "title": "NIST Artificial Intelligence Consortium",
+          "type": "Notice",
+          "publication_date": "2026-05-29",
+          "agencies": [
+            {
+              "name": "Commerce Department"
+            },
+            {
+              "name": "National Institute of Standards and Technology"
+            }
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/05/29/2026-10779/nist-artificial-intelligence-consortium",
+          "abstract": "The National Institute of Standards and Technology (NIST), an agency of the United States Department of Commerce, previously announced the formation of the Artificial Intelligence Safety Institute Consortium (\"AISIC\") th"
+        },
+        {
+          "document_number": "2025-22127",
+          "title": "Request for Information (RFI) on Partnerships for Transformational Artificial Intelligence Models",
+          "type": "Notice",
+          "publication_date": "2025-12-05",
+          "agencies": [
+            {
+              "name": "Energy Department"
+            }
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2025/12/05/2025-22127/request-for-information-rfi-on-partnerships-for-transformational-artificial-intelligence-models",
+          "abstract": "The U.S. Department of Energy (DOE) invites public comment on its Request for Information (RFI) regarding Partnerships for Transformational Artificial Intelligence Models. The purpose of this RFI is to solicit feedback f"
+        }
+      ]
+    }
+  }
+}

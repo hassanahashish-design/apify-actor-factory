@@ -1,0 +1,118 @@
+{
+  "slug": "hacker-news-monitor",
+  "username": "oblanceolate_mandola",
+  "title": "Hacker News Search — Stories & Mentions to JSON",
+  "shortDescription": "Search Hacker News stories by keyword and get title, points, comments, author, date and URL as JSON — $0.002 per story.",
+  "seoTitle": "Hacker News Scraper — Story & Keyword Search to JSON API",
+  "seoDescription": "Hacker News scraper & API: search stories by keyword for points, comments, author and date as JSON. For brand-monitoring and trend-spotting AI agents.",
+  "categories": [
+    "NEWS",
+    "SOCIAL_MEDIA",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "points",
+    "comments",
+    "author",
+    "url"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.002
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "Keyword, brand, or topic",
+    "description": "Term to search across Hacker News stories, e.g. a company name, product, or technology.",
+    "example": "anthropic",
+    "prefill": [
+      "anthropic"
+    ]
+  },
+  "readme": {
+    "intro": "Hacker News is where launches break and reputations are made. This actor turns a keyword into the matching HN stories with their scores and discussion volume, so brand-monitoring, trend-spotting, and launch-tracking agents can catch the conversation while it is live.",
+    "bullets": [
+      "Search all Hacker News stories by keyword, brand, product, or topic",
+      "Each result: title, points, comment count, author, created date, story URL + HN object ID",
+      "Filter by postedAfter for \"mentions since my last check\" monitoring",
+      "Batch many terms per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with sourceUrl + scrapedAt on every item"
+    ],
+    "sampleOutput": {
+      "query": "anthropic",
+      "source": "hackernews",
+      "title": "Anthropic acquires Bun",
+      "points": 2192,
+      "comments": 1073,
+      "author": "ryanvogel",
+      "url": "https://bun.com/blog/bun-joins-anthropic",
+      "sourceUrl": "https://hn.algolia.com/api/v1/search?query=anthropic",
+      "scrapedAt": "2026-06-11T09:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "Does it cover comments too?",
+        "a": "v1 searches stories. Each result includes the comment count and links to the HN discussion via the object ID."
+      },
+      {
+        "q": "How do I monitor a brand over time?",
+        "a": "Set postedAfter and run on a schedule to get only new mentions since the last run."
+      },
+      {
+        "q": "What is the data source?",
+        "a": "The official Hacker News Search API (Algolia), which indexes all HN stories and comments."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "hackernews",
+      "urlTemplate": "https://hn.algolia.com/api/v1/search?query={query}",
+      "params": {
+        "tags": "story",
+        "hitsPerPage": "50"
+      },
+      "itemsPath": "hits",
+      "fields": {
+        "jobId": "objectID",
+        "title": "title",
+        "url": "url",
+        "author": "author",
+        "points": "points",
+        "comments": "num_comments",
+        "postedAt": {
+          "path": "created_at",
+          "transform": "toIso"
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "hackernews": {
+      "hits": [
+        {
+          "title": "Anthropic acquires Bun",
+          "url": "https://bun.com/blog/bun-joins-anthropic",
+          "author": "ryanvogel",
+          "points": 2192,
+          "num_comments": 1073,
+          "created_at": "2025-12-02T18:05:44Z",
+          "objectID": "46124267"
+        },
+        {
+          "title": "S&P 500 rejects SpaceX, also blocking entry for OpenAI and Anthropic",
+          "url": "https://arstechnica.com/tech-policy/2026/06/sp-500-blocks-fast-spacex-entry-wont-waive-rule-for-unprofitable-ai-firms/",
+          "author": "maltalex",
+          "points": 1472,
+          "num_comments": 500,
+          "created_at": "2026-06-06T04:38:36Z",
+          "objectID": "48421442"
+        }
+      ]
+    }
+  }
+}

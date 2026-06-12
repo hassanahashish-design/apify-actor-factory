@@ -1,0 +1,57 @@
+{
+ "hits": {
+  "hits": [
+   {
+    "_id": "0001193125-15-268413:d89741dex1017a.htm",
+    "_source": {
+     "file_date": "2015-07-29",
+     "file_type": "EX-10.17(A)",
+     "form": "8-K",
+     "root_forms": [
+      "8-K"
+     ],
+     "display_names": [
+      "ViewRay, Inc.  (VRAYQ)  (CIK 0001597313)"
+     ],
+     "ciks": [
+      "0001597313"
+     ]
+    }
+   },
+   {
+    "_id": "0001193125-18-016648:d500497dex991.htm",
+    "_source": {
+     "file_date": "2018-01-23",
+     "file_type": "EX-99.1",
+     "form": "8-K",
+     "root_forms": [
+      "8-K"
+     ],
+     "display_names": [
+      "Tesla, Inc.  (TSLA)  (CIK 0001318605)"
+     ],
+     "ciks": [
+      "0001318605"
+     ]
+    }
+   },
+   {
+    "_id": "0001193125-16-665620:d200129dex993.htm",
+    "_source": {
+     "file_date": "2016-08-01",
+     "file_type": "EX-99.3",
+     "form": "8-K",
+     "root_forms": [
+      "8-K"
+     ],
+     "display_names": [
+      "TESLA MOTORS INC  (TSLA)  (CIK 0001318605)"
+     ],
+     "ciks": [
+      "0001318605"
+     ]
+    }
+   }
+  ]
+ }
+}

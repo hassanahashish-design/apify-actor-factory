@@ -1,0 +1,116 @@
+{
+  "slug": "gdelt-news-monitor",
+  "username": "oblanceolate_mandola",
+  "title": "GDELT News Monitor — Global News Mentions to JSON",
+  "shortDescription": "Search global news (GDELT, 100+ languages) by keyword and get article title, source, domain, country and date as JSON — $0.002 per article.",
+  "seoTitle": "GDELT News Scraper — Global News & Brand Mention Search to JSON API",
+  "seoDescription": "Global news scraper & API: search worldwide news by keyword (GDELT, 100+ languages) for source, country and date as JSON. For news-monitoring AI agents.",
+  "categories": [
+    "NEWS",
+    "SOCIAL_MEDIA",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "domain",
+    "sourceCountry",
+    "postedAt",
+    "url"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.002
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "Keyword, brand, or topic",
+    "description": "Term to search across worldwide online news, e.g. a company, product, person, or event. GDELT indexes news in 100+ languages.",
+    "example": "anthropic",
+    "prefill": [
+      "anthropic"
+    ]
+  },
+  "readme": {
+    "intro": "GDELT monitors the world’s news media in real time across 100+ languages. This actor turns a keyword into the matching global news coverage, so brand-monitoring, PR, and market-intelligence agents can track what the world is publishing about any topic as structured data.",
+    "bullets": [
+      "Search worldwide online news by keyword, brand, person, or event (100+ languages)",
+      "Each result: article title, publisher domain, source country, language, publication date, URL",
+      "Sorted newest-first; filter by postedAfter for an incremental mention feed",
+      "Batch many terms per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with the article URL + scrapedAt for citation"
+    ],
+    "sampleOutput": {
+      "query": "anthropic",
+      "source": "gdelt",
+      "title": "Anthropic launches new model",
+      "domain": "techcrunch.com",
+      "sourceCountry": "US",
+      "postedAt": "2026-06-11T14:30:00.000Z",
+      "url": "https://techcrunch.com/...",
+      "sourceUrl": "https://api.gdeltproject.org/api/v2/doc/doc?query=anthropic",
+      "scrapedAt": "2026-06-11T15:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "How current is the news?",
+        "a": "GDELT updates continuously; results are sorted newest-first so you see the latest coverage."
+      },
+      {
+        "q": "Does it cover non-English news?",
+        "a": "Yes — GDELT monitors news in 100+ languages worldwide, with the source country on each result."
+      },
+      {
+        "q": "Can I monitor a brand over time?",
+        "a": "Yes — search the term and use postedAfter on a schedule to catch only new coverage."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "gdelt",
+      "urlTemplate": "https://api.gdeltproject.org/api/v2/doc/doc?query={query}",
+      "params": {
+        "format": "json",
+        "maxrecords": "50",
+        "sort": "datedesc"
+      },
+      "itemsPath": "articles",
+      "fields": {
+        "title": "title",
+        "url": "url",
+        "domain": "domain",
+        "language": "language",
+        "sourceCountry": "sourcecountry",
+        "postedAt": {
+          "path": "seendate",
+          "transform": "gdeltDate"
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "gdelt": {
+      "articles": [
+        {
+          "url": "https://www.businessinsider.com/spacex-ipo-cathie-wood-ark-invest-elon-musk-2026-6",
+          "title": "SpaceX IPO Reaffirms Cathie Wood and ARK Invest Belief in Elon Musk",
+          "domain": "businessinsider.com",
+          "seendate": "20260611T104500Z",
+          "language": "English",
+          "sourcecountry": "United States"
+        },
+        {
+          "url": "https://www.freepressjournal.in/tech/microsoft-tells-employees-to-avoid-anthropics-claude-fable-5-over-data-retention-concerns",
+          "title": "Microsoft Tells Employees To Avoid Anthropic Claude Fable 5 Over Data Retention Concerns",
+          "domain": "freepressjournal.in",
+          "seendate": "20260611T104500Z",
+          "language": "English",
+          "sourcecountry": "India"
+        }
+      ]
+    }
+  }
+}

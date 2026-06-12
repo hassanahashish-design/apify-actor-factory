@@ -1,0 +1,26 @@
+{
+  "actorSpecification": 1,
+  "name": "__SLUG__",
+  "title": "__TITLE__",
+  "description": "__SEO_DESCRIPTION__",
+  "seoTitle": "__SEO_TITLE__",
+  "seoDescription": "__SEO_DESCRIPTION__",
+  "categories": __CATEGORIES__,
+  "version": "1.0",
+  "buildTag": "latest",
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile",
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1,
+      "title": "__TITLE__ results",
+      "views": {
+        "overview": {
+          "title": "Results",
+          "transformation": { "fields": __VIEW_FIELDS__ },
+          "display": { "component": "table" }
+        }
+      }
+    }
+  }
+}

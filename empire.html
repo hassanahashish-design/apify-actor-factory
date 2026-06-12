@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ServiceWire agent economy — live map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html,body{margin:0;height:100%;background:#04050a;overflow:hidden;font-family:"SF Mono",Menlo,monospace}
+  canvas{display:block}
+  #title{position:fixed;top:34px;left:34px;z-index:5;pointer-events:none}
+  #title .bar{display:inline-block;background:#000;color:#fff;font-size:20px;letter-spacing:2px;padding:8px 16px}
+  #title .sub{display:block;margin-top:10px;color:#6b7280;font-size:12px;letter-spacing:1px}
+  #tip{position:fixed;z-index:6;background:rgba(0,0,0,.85);border:1px solid rgba(255,255,255,.15);color:#e5e7eb;
+       font-size:12px;line-height:1.6;padding:10px 14px;border-radius:8px;pointer-events:none;display:none;max-width:260px}
+  #tip b{color:#fff}
+  #legend{position:fixed;bottom:26px;left:34px;z-index:5;color:#6b7280;font-size:11px;letter-spacing:1px;pointer-events:none}
+  #legend span{margin-right:18px}
+  #legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<div id="title">
+  <span class="bar">it started with one agent.</span>
+  <span class="sub">SERVICEWIRE AGENT ECONOMY · 5 ACTORS · 11 JUN 2026 · hover nodes · click to open</span>
+</div>
+<div id="tip"></div>
+<div id="legend">
+  <span><i style="background:#a78bfa"></i>ORCHESTRATION</span>
+  <span><i style="background:#34d399"></i>LIVE / READY</span>
+  <span><i style="background:#fbbf24"></i>WAITING ON HUMAN</span>
+  <span><i style="background:#f472b6"></i>BUYERS</span>
+  <span><i style="background:#64748b"></i>DORMANT</span>
+</div>
+<canvas id="c"></canvas>
+<script>
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const tip = document.getElementById('tip');
+let W, H, DPR;
+function resize(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = W * DPR; cv.height = H * DPR;
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+resize(); addEventListener('resize', resize);
+
+const PURPLE='#a78bfa', TEAL='#34d399', AMBER='#fbbf24', PINK='#f472b6', BLUE='#60a5fa', GRAY='#64748b', GOLD='#fcd34d', CORAL='#fb923c', RED='#f87171';
+
+const nodes = [
+  {id:'hub', x:.50, y:.46, r:30, color:PURPLE, style:'web', label:'FACTORY ORCHESTRATOR',
+   info:'<b>The hub (Claude)</b><br>Runs the 9-stage pipeline: moat gate, spec, scaffold, adversarial QA, push, listing. Calls every agent, owns every kill.'},
+  {id:'hire', x:.30, y:.27, r:22, color:TEAL, style:'burst', label:'company-hiring-signals', sub:'READY TO PUSH',
+   url:'https://console.apify.com/actors/development',
+   info:'<b>company-hiring-signals</b><br>Job postings from Greenhouse / Lever / Ashby as hiring signals. 10/10 tests, live-verified. $0.002 per result.<br><b>Next: push (1 command).</b>'},
+  {id:'uae', x:.71, y:.26, r:22, color:AMBER, style:'burst', label:'uae-business-verify', sub:'PARKED · CREDENTIAL',
+   url:'https://console.apify.com/actors/ZFVJYfuhumT6dzjzg',
+   info:'<b>uae-business-verify</b><br>Dubai DED license verification — flagship, gated-data moat. Built, 21/21 tests, pushed. $0.05 per lookup.<br><b>Blocked: Dubai Pulse signup needs a UAE IP.</b>'},
+  {id:'old', x:.16, y:.50, r:14, color:GRAY, style:'burst', label:'job-postings-scraper', sub:'ARCHIVED',
+   info:'<b>job-postings-scraper</b><br>First-generation hand-built actor. Superseded by the factory build. Kept for reference.'},
+  {id:'gh', x:.12, y:.76, r:11, color:TEAL, style:'dots', label:'greenhouse',
+   info:'<b>Greenhouse API</b><br>Public job-board JSON. Verified live: 496 jobs at Stripe.'},
+  {id:'lv', x:.24, y:.85, r:11, color:TEAL, style:'dots', label:'lever',
+   info:'<b>Lever API</b><br>Public postings JSON. Verified live: 222 jobs at Palantir.'},
+  {id:'as', x:.36, y:.78, r:11, color:TEAL, style:'dots', label:'ashby',
+   info:'<b>Ashby API</b><br>Public job-board JSON. Verified live: 729 jobs at OpenAI.'},
+  {id:'dp', x:.88, y:.14, r:13, color:RED, style:'lock', label:'dubai pulse', sub:'GATED',
+   url:'https://www.dubaipulse.gov.ae/data/ded-licenses/ded_license_master-open',
+   info:'<b>Dubai Pulse (DED registry)</b><br>Official license data. Geo-blocked + account-gated — the wall that IS the moat. One 5-min signup from a UAE IP unlocks the flagship.'},
+  {id:'store', x:.62, y:.62, r:18, color:BLUE, style:'ring', label:'APIFY STORE + MCP',
+   url:'https://apify.com/store',
+   info:'<b>Apify Store + MCP endpoint</b><br>Where agents discover and call the actors. Pay-per-event billing, 80/20 split, OpenAPI + MCP exposure automatic.'},
+  {id:'mon', x:.41, y:.64, r:12, color:TEAL, style:'ring', label:'monitor',
+   info:'<b>Portfolio monitor</b><br>scripts/monitor.mjs — scheduled canary runs on every published actor. Catches breakage before customers do.'},
+  {id:'buyers', x:.80, y:.76, r:20, color:PINK, style:'cluster', label:'AI AGENT BUYERS',
+   info:'<b>The customers: AI agents</b><br>Claude / GPT / LangChain agents doing KYB checks, sales intel, recruiting. They discover via MCP, call autonomously, pay per result.'},
+  {id:'pay', x:.93, y:.52, r:13, color:GOLD, style:'ring', label:'payout', sub:'MONTHLY · 80%',
+   url:'https://console.apify.com/billing',
+   info:'<b>Revenue</b><br>Charged per successful result. Apify invoices the 11th monthly, pays day 15–22. PayPal min $20 / wire min $100.'},
+  {id:'sw', x:.08, y:.26, r:14, color:CORAL, style:'dots', label:'servicewire', sub:'DISTRIBUTION',
+   info:'<b>ServiceWire</b><br>NFC cards + AI receptionist = owned GCC SMB distribution. Future: receptionist as agent-bookable endpoint, card clients as warm B2B channel.'},
+  {id:'qa', x:.50, y:.14, r:15, color:RED, style:'cluster', label:'bug-hunter agent', sub:'ADVERSARIAL QA',
+   info:'<b>Bug-hunter agent</b><br>Standing adversarial reviewer (.claude/agents/bug-hunter.md). Probes every actor before push. Found 13 bugs in uae-verify, 8 in hiring-signals, and a systemic cluster across the new batch. Nothing ships without its verdict.'},
+  {id:'sec', x:.085, y:.45, r:18, color:TEAL, style:'burst', label:'sec-edgar-filings', sub:'READY · $0.005',
+   info:'<b>sec-edgar-filings</b><br>SEC EDGAR full-text company filings → JSON. Finance / due-diligence agents. Bug-hunt fixed a form-field-null bug. 21/21 tests, ready to push.'},
+  {id:'paper', x:.91, y:.40, r:18, color:TEAL, style:'burst', label:'research-paper-search', sub:'READY · $0.003',
+   info:'<b>research-paper-search</b><br>OpenAlex 250M academic papers → JSON. Research / grounding agents. Bug-hunt verdict: SHIP (clean). 21/21 tests, ready to push.'},
+  {id:'gh2', x:.90, y:.62, r:18, color:TEAL, style:'burst', label:'github-repo-search', sub:'READY · $0.003',
+   info:'<b>github-repo-search</b><br>GitHub repo metadata → JSON. Dev-tooling / vetting agents. Bug-hunt fixed a silent-zero filter leak. 21/21 tests, ready to push.'},
+  {id:'hn', x:.60, y:.81, r:18, color:TEAL, style:'burst', label:'hacker-news-monitor', sub:'READY · $0.002',
+   info:'<b>hacker-news-monitor</b><br>Hacker News stories by keyword → JSON. Brand / trend monitoring agents. Bug-hunt fixed a cross-query double-charge. 21/21 tests, ready to push.'},
+];
+
+const edges = [
+  {a:'hub', b:'hire', c:TEAL,  n:3, sp:.0016},
+  {a:'hub', b:'uae',  c:AMBER, n:3, sp:.0014},
+  {a:'hub', b:'old',  c:GRAY,  n:1, sp:.0008, dim:true},
+  {a:'hub', b:'mon',  c:TEAL,  n:1, sp:.0010},
+  {a:'gh',  b:'hire', c:TEAL,  n:2, sp:.0022},
+  {a:'lv',  b:'hire', c:TEAL,  n:2, sp:.0020},
+  {a:'as',  b:'hire', c:TEAL,  n:2, sp:.0024},
+  {a:'dp',  b:'uae',  c:RED,   n:1, sp:.0008, dim:true},
+  {a:'hire',b:'store',c:BLUE,  n:3, sp:.0018},
+  {a:'uae', b:'store',c:BLUE,  n:2, sp:.0014},
+  {a:'mon', b:'store',c:TEAL,  n:1, sp:.0008, dim:true},
+  {a:'buyers',b:'store',c:PINK,n:4, sp:.0022},
+  {a:'store',b:'pay', c:GOLD,  n:3, sp:.0016},
+  {a:'sw',  b:'hub',  c:CORAL, n:2, sp:.0012},
+  {a:'hub', b:'qa',   c:RED,   n:2, sp:.0014},
+  {a:'qa',  b:'hire', c:RED,   n:1, sp:.0011, dim:true},
+  {a:'qa',  b:'uae',  c:RED,   n:1, sp:.0011, dim:true},
+  {a:'hub', b:'sec',  c:TEAL,  n:2, sp:.0015},
+  {a:'hub', b:'paper',c:TEAL,  n:2, sp:.0015},
+  {a:'hub', b:'gh2',  c:TEAL,  n:2, sp:.0015},
+  {a:'hub', b:'hn',   c:TEAL,  n:2, sp:.0015},
+  {a:'sec',  b:'store', c:BLUE, n:2, sp:.0017},
+  {a:'paper',b:'store', c:BLUE, n:2, sp:.0017},
+  {a:'gh2',  b:'store', c:BLUE, n:2, sp:.0017},
+  {a:'hn',   b:'store', c:BLUE, n:2, sp:.0017},
+  {a:'qa',  b:'sec',  c:RED,   n:1, sp:.0010, dim:true},
+  {a:'qa',  b:'paper',c:RED,   n:1, sp:.0010, dim:true},
+  {a:'qa',  b:'gh2',  c:RED,   n:1, sp:.0010, dim:true},
+  {a:'qa',  b:'hn',   c:RED,   n:1, sp:.0010, dim:true},
+];
+
+const N = Object.fromEntries(nodes.map(n => [n.id, n]));
+function px(n){ return {x:n.x*W, y:n.y*H}; }
+function ctrl(a, b){
+  const ax=a.x, ay=a.y, bx=b.x, by=b.y;
+  const mx=(ax+bx)/2, my=(ay+by)/2, dx=bx-ax, dy=by-ay;
+  const len=Math.hypot(dx,dy)||1;
+  return {x: mx - dy/len*len*.18, y: my + dx/len*len*.18};
+}
+function bez(a,c,b,t){
+  const u=1-t;
+  return {x:u*u*a.x+2*u*t*c.x+t*t*b.x, y:u*u*a.y+2*u*t*c.y+t*t*b.y};
+}
+edges.forEach(e => { e.p = Array.from({length:e.n}, (_,i)=> i/e.n + Math.random()*.2); });
+
+let hover=null, t0=performance.now();
+function drawNode(n, time){
+  const {x,y}=px(n); const pulse = 1 + .08*Math.sin(time*.0015 + x);
+  const r = n.r*pulse, hl = hover===n;
+  ctx.save();
+  ctx.shadowColor=n.color; ctx.shadowBlur=hl?38:22;
+  if(n.style==='web'){
+    ctx.strokeStyle=n.color; ctx.globalAlpha=.9;
+    for(let ring=1; ring<=3; ring++){
+      ctx.beginPath();
+      for(let i=0;i<=6;i++){const a=i/6*Math.PI*2+time*.0001;
+        const rr=r*ring/3; const X=x+Math.cos(a)*rr, Y=y+Math.sin(a)*rr;
+        i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}
+      ctx.closePath(); ctx.lineWidth=ring===3?1.4:.7; ctx.stroke();
+    }
+    for(let i=0;i<6;i++){const a=i/6*Math.PI*2+time*.0001;
+      ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+Math.cos(a)*r, y+Math.sin(a)*r);
+      ctx.lineWidth=.6; ctx.stroke();}
+    ctx.beginPath(); ctx.arc(x,y,3.5,0,7); ctx.fillStyle='#fff'; ctx.fill();
+  } else if(n.style==='burst'||n.style==='cluster'||n.style==='dots'){
+    const dots = n.style==='cluster'? 26 : n.style==='burst'? 18 : 10;
+    ctx.fillStyle=n.color;
+    for(let i=0;i<dots;i++){
+      const a=i/dots*Math.PI*2 + time*.0002*(n.style==='cluster'?-1:1);
+      const rr=r*(.55+.45*Math.sin(i*7+time*.001));
+      ctx.globalAlpha=.55; ctx.beginPath();
+      ctx.arc(x+Math.cos(a)*rr, y+Math.sin(a)*rr, 1.6, 0, 7); ctx.fill();
+    }
+    ctx.globalAlpha=1; ctx.beginPath(); ctx.arc(x,y,4.5,0,7); ctx.fill();
+    ctx.strokeStyle=n.color; ctx.globalAlpha=.5; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(x,y,r*.55,0,7); ctx.stroke();
+  } else if(n.style==='ring'){
+    ctx.strokeStyle=n.color; ctx.lineWidth=2; ctx.globalAlpha=.95;
+    ctx.beginPath(); ctx.arc(x,y,r*.7,0,7); ctx.stroke();
+    ctx.fillStyle=n.color; ctx.beginPath(); ctx.arc(x,y,3.5,0,7); ctx.fill();
+  } else if(n.style==='lock'){
+    ctx.strokeStyle=n.color; ctx.lineWidth=1.6; ctx.globalAlpha=.95;
+    ctx.beginPath(); ctx.arc(x,y,r*.8,0,7); ctx.stroke();
+    ctx.setLineDash([3,4]); ctx.beginPath(); ctx.arc(x,y,r*1.35,0,7); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=n.color;
+    ctx.fillRect(x-4.5, y-2, 9, 7);
+    ctx.beginPath(); ctx.arc(x, y-2, 3.2, Math.PI, 0); ctx.stroke();
+  }
+  ctx.restore();
+  ctx.fillStyle = hl ? '#fff' : 'rgba(229,231,235,.85)';
+  ctx.font = '11px "SF Mono", Menlo, monospace'; ctx.textAlign='center';
+  ctx.fillText(n.label, x, y + n.r + 18);
+  if(n.sub){ ctx.fillStyle = n.color; ctx.globalAlpha=.9; ctx.font='9px "SF Mono", Menlo, monospace';
+    ctx.fillText(n.sub, x, y + n.r + 31); ctx.globalAlpha=1; }
+}
+
+function frame(time){
+  ctx.clearRect(0,0,W,H);
+  const g = ctx.createRadialGradient(W*.5,H*.45,0,W*.5,H*.45,Math.max(W,H)*.7);
+  g.addColorStop(0,'#0a0c18'); g.addColorStop(1,'#04050a');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+  for(const e of edges){
+    const a=px(N[e.a]), b=px(N[e.b]), c=ctrl(a,b);
+    ctx.strokeStyle=e.dim?'rgba(148,163,184,.10)':'rgba(148,163,184,.18)';
+    ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo(c.x,c.y,b.x,b.y); ctx.stroke();
+    for(let i=0;i<e.p.length;i++){
+      e.p[i]=(e.p[i]+e.sp)%1;
+      const pt=bez(a,c,b,e.p[i]);
+      ctx.save(); ctx.shadowColor=e.c; ctx.shadowBlur=10;
+      ctx.fillStyle='#fff'; ctx.globalAlpha=.95;
+      ctx.beginPath(); ctx.arc(pt.x,pt.y,1.8,0,7); ctx.fill();
+      ctx.fillStyle=e.c; ctx.globalAlpha=.5;
+      const tr=bez(a,c,b,Math.max(0,e.p[i]-.02));
+      ctx.beginPath(); ctx.arc(tr.x,tr.y,1.2,0,7); ctx.fill();
+      ctx.restore();
+    }
+  }
+  for(const n of nodes) drawNode(n, time);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+addEventListener('mousemove', ev => {
+  const mx=ev.clientX, my=ev.clientY;
+  hover=null;
+  for(const n of nodes){ const {x,y}=px(n);
+    if(Math.hypot(mx-x,my-y) < n.r+16){ hover=n; break; } }
+  cv.style.cursor = hover && hover.url ? 'pointer' : 'default';
+  if(hover){
+    tip.innerHTML = hover.info;
+    tip.style.display='block';
+    tip.style.left = Math.min(mx+18, W-280)+'px';
+    tip.style.top  = Math.min(my+18, H-120)+'px';
+  } else tip.style.display='none';
+});
+addEventListener('click', () => { if(hover && hover.url) window.open(hover.url, '_blank'); });
+</script>
+</body>
+</html>

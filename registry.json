@@ -1,0 +1,325 @@
+{
+  "_comment": "Portfolio manifest. One entry per actor. status: spec|scaffolded|pushed|published|parked. The monitor (scripts/monitor.mjs) checks every status:published actor against its canary.",
+  "actors": [
+    {
+      "slug": "company-hiring-signals",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "Aggregation + normalization across 3 ATS APIs; GCC/UAE-angle listing planned. Live competition: several incumbents — differentiation is the unified shape + hiring-signal framing.",
+      "pricePerResultUsd": 0.002,
+      "canary": {
+        "query": "stripe",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "sourceUrl",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-10",
+      "bugHuntResult": "8 confirmed bugs found and fixed (incl. billing-cap revenue leak); 18/18 regression tests green; live-verified",
+      "attempts": 0,
+      "smoke": {
+        "at": "2026-06-11T09:53:01.528Z",
+        "verified": "platform run SUCCEEDED, build 1.0.4, real items confirmed",
+        "by": "user-run + API check"
+      },
+      "pricingSetViaApi": "2026-06-11",
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "displayInfoSet": "2026-06-12",
+      "outputSchemaSet": "2026-06-12",
+      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+    },
+    {
+      "slug": "uae-business-verify",
+      "username": "oblanceolate_mandola",
+      "status": "parked",
+      "moat": "Gated official data (Dubai DED via Dubai Pulse). Strongest moat in portfolio; not factory-generated.",
+      "pricePerResultUsd": 0.05,
+      "canary": {
+        "query": "Passion Jewellers",
+        "minItems": 1,
+        "expectFields": [
+          "matches"
+        ]
+      },
+      "parkedReason": "Dubai Pulse registration requires a UAE IP; awaiting API credential. See uae-business-verify/DEPLOY.md."
+    },
+    {
+      "slug": "sec-edgar-filings",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "Official SEC full-text filings; finance/due-diligence buyers; few clean agent-ready actors",
+      "pricePerResultUsd": 0.005,
+      "canary": {
+        "query": "artificial intelligence",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "documentId",
+          "sourceUrl",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-11",
+      "bugHuntResult": "FIX FIRST: form field mapped to nonexistent _source.root_form (shipped null) — fixed to _source.form + faithful fixture; jobs-filter leak fixed systemically",
+      "attempts": 1,
+      "pricingSetViaApi": "2026-06-11",
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "displayInfoSet": "2026-06-12",
+      "outputSchemaSet": "2026-06-12",
+      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+    },
+    {
+      "slug": "research-paper-search",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "OpenAlex 250M works; research/grounding buyers; clean citations",
+      "pricePerResultUsd": 0.003,
+      "canary": {
+        "query": "large language models",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "doi",
+          "sourceUrl",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-11",
+      "bugHuntResult": "SHIP: no correctness bugs; jobs-filter leak fixed systemically at template level",
+      "attempts": 1,
+      "pricingSetViaApi": "2026-06-11",
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "displayInfoSet": "2026-06-12",
+      "outputSchemaSet": "2026-06-12",
+      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+    },
+    {
+      "slug": "github-repo-search",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "GitHub repo metadata; dev-tooling/vetting buyers",
+      "pricePerResultUsd": 0.003,
+      "canary": {
+        "query": "ai agent",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "stars",
+          "url",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-11",
+      "bugHuntResult": "FIX FIRST: jobs-filter silent-zero (systemic), 403 retry waste, GITHUB_TOKEN overstatement — all fixed",
+      "attempts": 1,
+      "pricingSetViaApi": "2026-06-11",
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "displayInfoSet": "2026-06-12",
+      "outputSchemaSet": "2026-06-12",
+      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+    },
+    {
+      "slug": "hacker-news-monitor",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "HN Algolia search; brand/trend monitoring buyers",
+      "pricePerResultUsd": 0.002,
+      "canary": {
+        "query": "anthropic",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "points",
+          "sourceUrl",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-11",
+      "bugHuntResult": "FIX FIRST: jobs-filter silent-zero + cross-query double-charge — both fixed systemically (dedupeKey)",
+      "attempts": 1,
+      "pricingSetViaApi": "2026-06-11",
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "displayInfoSet": "2026-06-12",
+      "outputSchemaSet": "2026-06-12",
+      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+    },
+    {
+      "slug": "federal-register-monitor",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "US Federal Register regulatory docs; compliance/policy buyers",
+      "pricePerResultUsd": 0.004,
+      "canary": {
+        "query": "data privacy",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "agency",
+          "url",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-11",
+      "bugHuntResult": "FIX FIRST fixed: README filter honesty, agency pluckNames, keyword haystack, reachable maxResults",
+      "pricingSetViaApi": "2026-06-11",
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "displayInfoSet": "2026-06-12",
+      "outputSchemaSet": "2026-06-12",
+      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+    },
+    {
+      "slug": "clinical-trials-search",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "ClinicalTrials.gov v2; pharma/biotech buyers",
+      "pricePerResultUsd": 0.004,
+      "canary": {
+        "query": "diabetes",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "nctId",
+          "status",
+          "sourceUrl"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-11",
+      "bugHuntResult": "FIX FIRST fixed: dedupeKey id-chain (was dropping same-title trials)",
+      "pricingSetViaApi": "2026-06-11",
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "displayInfoSet": "2026-06-12",
+      "outputSchemaSet": "2026-06-12",
+      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+    },
+    {
+      "slug": "stackoverflow-search",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "Stack Overflow Q&A; dev-support buyers",
+      "pricePerResultUsd": 0.002,
+      "canary": {
+        "query": "rust async",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "score",
+          "url",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-11",
+      "bugHuntResult": "SHIP: epoch-seconds pre-empted",
+      "pricingSetViaApi": "2026-06-11",
+      "billingModel": "apify-default-dataset-item (automatic)",
+      "displayInfoSet": "2026-06-12",
+      "outputSchemaSet": "2026-06-12",
+      "publishBlockedBy": "Store T&C acceptance (account-wide, Console only) — everything else ready"
+    },
+    {
+      "slug": "gdelt-news-monitor",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "GDELT global news (100+ languages); brand/news-monitoring buyers",
+      "pricePerResultUsd": 0.002,
+      "canary": {
+        "query": "anthropic",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "url",
+          "sourceUrl",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-12",
+      "bugHuntResult": "SHIP (inline bug-hunt, sub-agents kept dying on ConnectionRefused): rate-limit plaintext-200 surfaces clean error not crash/silent; gdeltDate ok; no Actor.charge; 27/27",
+      "billingModel": "apify-default-dataset-item (automatic)"
+    },
+    {
+      "slug": "wikipedia-search",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "Wikipedia grounding/disambiguation; research/RAG buyers",
+      "pricePerResultUsd": 0.001,
+      "canary": {
+        "query": "agentic commerce",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "key",
+          "sourceUrl",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-12",
+      "bugHuntResult": "SHIP (inline bug-hunt): excerpt cleaned, sourceUrl present, null-description handled, no Actor.charge; 27/27. Minor cosmetic: stripHtml leaves stray space in search-match excerpts",
+      "billingModel": "apify-default-dataset-item (automatic)"
+    },
+    {
+      "slug": "court-opinions-search",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "CourtListener US case law; legal/compliance/due-diligence buyers; completes SEC+FederalRegister legal trio",
+      "pricePerResultUsd": 0.004,
+      "canary": {
+        "query": "data privacy",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "court",
+          "url",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-12",
+      "bugHuntResult": "SHIP (inline): clUrl transform makes absolute opinion URLs, real cases returned, no Actor.charge, 27/27",
+      "billingModel": "apify-default-dataset-item (automatic)"
+    },
+    {
+      "slug": "podcast-search",
+      "username": "oblanceolate_mandola",
+      "status": "pushed",
+      "moat": "Apple Podcasts discovery; content/research/marketing buyers",
+      "pricePerResultUsd": 0.002,
+      "canary": {
+        "query": "technology",
+        "minItems": 1,
+        "expectFields": [
+          "title",
+          "artist",
+          "url",
+          "scrapedAt"
+        ]
+      },
+      "parkedReason": null,
+      "bugHuntPassed": true,
+      "bugHuntAt": "2026-06-12",
+      "bugHuntResult": "SHIP (inline): full Apple Podcasts URLs, feedUrl optional, no Actor.charge, 27/27",
+      "billingModel": "apify-default-dataset-item (automatic)"
+    }
+  ]
+}

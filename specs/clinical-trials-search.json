@@ -1,0 +1,163 @@
+{
+  "slug": "clinical-trials-search",
+  "username": "oblanceolate_mandola",
+  "title": "Clinical Trials Search — ClinicalTrials.gov to JSON",
+  "shortDescription": "Search ClinicalTrials.gov by condition, drug or sponsor and get trial title, status, phase, sponsor and NCT id as JSON — $0.004 per trial.",
+  "seoTitle": "Clinical Trials Scraper — ClinicalTrials.gov Study Search to JSON API",
+  "seoDescription": "Clinical trials scraper & API: search ClinicalTrials.gov by condition, drug or sponsor for status, phase and NCT id as JSON. For pharma and biotech AI agents.",
+  "categories": [
+    "BUSINESS",
+    "NEWS",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "status",
+    "sponsor",
+    "nctId"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.004
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "Condition, drug, or sponsor",
+    "description": "Term to search across registered clinical studies, e.g. \"diabetes\", \"semaglutide\", or a sponsor/company name.",
+    "example": "diabetes",
+    "prefill": [
+      "diabetes"
+    ]
+  },
+  "readme": {
+    "intro": "Clinical trial activity is a leading signal of pharma and biotech pipelines. This actor turns a condition, drug, or sponsor into the matching registered studies, so healthcare, investment, and competitive-intelligence agents can read the trial landscape as structured data.",
+    "bullets": [
+      "Search ClinicalTrials.gov by condition, intervention/drug, or sponsor",
+      "Each result: brief title, recruitment status, phase, lead sponsor, conditions, NCT id",
+      "Open any study at clinicaltrials.gov/study/{nctId}",
+      "Batch many terms per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with sourceUrl + scrapedAt for citation"
+    ],
+    "sampleOutput": {
+      "query": "diabetes",
+      "source": "clinical_trials",
+      "title": "Effect of Diet on Type 2 Diabetes",
+      "status": "COMPLETED",
+      "sponsor": "University Hospital",
+      "nctId": "NCT00471549",
+      "conditions": [
+        "Diabetes Mellitus, Type 2"
+      ],
+      "sourceUrl": "https://clinicaltrials.gov/api/v2/studies?query.term=diabetes",
+      "scrapedAt": "2026-06-11T09:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "How do I open a study?",
+        "a": "Each result includes its NCT id; the study page is clinicaltrials.gov/study/{nctId}."
+      },
+      {
+        "q": "Can I track a company’s pipeline?",
+        "a": "Yes — search by sponsor name and schedule with postedAfter for new-trial alerts."
+      },
+      {
+        "q": "What is the source?",
+        "a": "The official ClinicalTrials.gov v2 API (US National Library of Medicine)."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "clinical_trials",
+      "urlTemplate": "https://clinicaltrials.gov/api/v2/studies?query.term={query}",
+      "params": {
+        "pageSize": "50"
+      },
+      "itemsPath": "studies",
+      "fields": {
+        "nctId": "protocolSection.identificationModule.nctId",
+        "title": "protocolSection.identificationModule.briefTitle",
+        "status": "protocolSection.statusModule.overallStatus",
+        "sponsor": "protocolSection.sponsorCollaboratorsModule.leadSponsor.name",
+        "conditions": {
+          "path": "protocolSection.conditionsModule.conditions",
+          "optional": true
+        },
+        "phases": {
+          "path": "protocolSection.designModule.phases",
+          "optional": true
+        },
+        "postedAt": {
+          "path": "protocolSection.statusModule.startDateStruct.date",
+          "transform": "toIso",
+          "optional": true
+        }
+      }
+    }
+  ],
+  "fixtures": {
+    "clinical_trials": {
+      "studies": [
+        {
+          "protocolSection": {
+            "identificationModule": {
+              "nctId": "NCT00471549",
+              "briefTitle": "Simvastatin Reduces Circulating Osteoprotegerin Levels in Patients With Type 2 Diabetes"
+            },
+            "statusModule": {
+              "overallStatus": "COMPLETED",
+              "startDateStruct": {
+                "date": "1991-06"
+              }
+            },
+            "sponsorCollaboratorsModule": {
+              "leadSponsor": {
+                "name": "University of Aarhus"
+              }
+            },
+            "conditionsModule": {
+              "conditions": [
+                "Type 2 Diabetes"
+              ]
+            },
+            "designModule": {
+              "phases": [
+                "PHASE4"
+              ]
+            }
+          }
+        },
+        {
+          "protocolSection": {
+            "identificationModule": {
+              "nctId": "NCT03438149",
+              "briefTitle": "Microparticles in Obstructive Sleep Apnea"
+            },
+            "statusModule": {
+              "overallStatus": "UNKNOWN",
+              "startDateStruct": {
+                "date": "2018-02-20"
+              }
+            },
+            "sponsorCollaboratorsModule": {
+              "leadSponsor": {
+                "name": "University Hospital, Angers"
+              }
+            },
+            "conditionsModule": {
+              "conditions": [
+                "Sleep Apnea, Obstructive"
+              ]
+            },
+            "designModule": {
+              "phases": []
+            }
+          }
+        }
+      ]
+    }
+  }
+}

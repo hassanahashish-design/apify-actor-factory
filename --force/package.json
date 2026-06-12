@@ -1,0 +1,15 @@
+{
+  "name": "hacker-news-monitor",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Search Hacker News stories by keyword and get title, points, comments, author, date and URL as JSON — $0.002 per story.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "apify": "^3.2.6",
+    "undici": "^6.21.0"
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "slug": "research-paper-search",
+  "username": "oblanceolate_mandola",
+  "title": "Research Paper Search — Academic Papers to JSON (OpenAlex)",
+  "shortDescription": "Search 250M+ academic papers by topic and get title, authors, year, citation count, venue and DOI as JSON — $0.003 per paper.",
+  "seoTitle": "Research Paper Scraper — Academic Literature Search to JSON (OpenAlex API)",
+  "seoDescription": "Academic paper scraper & API: search 250M+ research papers by topic for title, authors, year, citations and DOI as JSON. For research and RAG AI agents.",
+  "categories": [
+    "AI",
+    "NEWS",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "year",
+    "citations",
+    "venue",
+    "doi"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.003
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 50
+  },
+  "query": {
+    "label": "Research topic or keywords",
+    "description": "Topic to search across academic literature, e.g. \"large language models\", \"CRISPR gene editing\", \"agentic commerce\".",
+    "example": "large language models",
+    "prefill": [
+      "large language models"
+    ]
+  },
+  "readme": {
+    "intro": "Literature review is the slowest part of any research task. This actor turns a topic into the most relevant academic papers from OpenAlex (250M+ works), so research and grounding agents can cite real, dated, peer-reviewed sources instead of hallucinating references.",
+    "bullets": [
+      "Search 250M+ academic works by topic across every field",
+      "Each result: title, authors, publication year + date, citation count, venue, DOI",
+      "Filter by postedAfter for \"papers since my last run\" monitoring of a field",
+      "Batch many topics per run; cap spend with maxResults",
+      "Agent-ready: flat JSON with DOI + sourceUrl for citation and grounding"
+    ],
+    "sampleOutput": {
+      "query": "large language models",
+      "source": "openalex",
+      "title": "ChatGPT for good? On opportunities and challenges of large language models for education",
+      "year": 2023,
+      "citations": 4943,
+      "venue": "Learning and Individual Differences",
+      "doi": "https://doi.org/10.1016/j.lindif.2023.102274",
+      "sourceUrl": "https://api.openalex.org/works?search=large+language+models",
+      "scrapedAt": "2026-06-11T09:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "Where does the data come from?",
+        "a": "OpenAlex, a free and open index of scholarly works (successor to Microsoft Academic Graph)."
+      },
+      {
+        "q": "Can I track new papers in a field?",
+        "a": "Yes — set postedAfter and run on a schedule for an incremental literature feed."
+      },
+      {
+        "q": "Does it include citation counts?",
+        "a": "Yes, every result carries its current cited-by count so you can rank by impact."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "openalex",
+      "urlTemplate": "https://api.openalex.org/works?search={query}",
+      "params": {
+        "per_page": "50"
+      },
+      "itemsPath": "results",
+      "fields": {
+        "jobId": "id",
+        "title": "title",
+        "year": "publication_year",
+        "citations": "cited_by_count",
+        "doi": "doi",
+        "venue": "primary_location.source.display_name",
+        "firstAuthor": "authorships.0.author.display_name",
+        "postedAt": {
+          "path": "publication_date",
+          "transform": "toIso"
+        },
+        "url": "id"
+      }
+    }
+  ],
+  "fixtures": {
+    "openalex": {
+      "results": [
+        {
+          "id": "https://openalex.org/W4323655724",
+          "title": "ChatGPT for good? On opportunities and challenges of large language models for education",
+          "publication_year": 2023,
+          "publication_date": "2023-03-09",
+          "cited_by_count": 4943,
+          "doi": "https://doi.org/10.1016/j.lindif.2023.102274",
+          "primary_location": {
+            "source": {
+              "display_name": "Learning and Individual Differences"
+            }
+          },
+          "authorships": [
+            {
+              "author": {
+                "display_name": "Enkelejda Kasneci"
+              }
+            },
+            {
+              "author": {
+                "display_name": "Kathrin Seßler"
+              }
+            },
+            {
+              "author": {
+                "display_name": "Stefan Küchemann"
+              }
+            }
+          ]
+        },
+        {
+          "id": "https://openalex.org/W4384561707",
+          "title": "Large language models in medicine",
+          "publication_year": 2023,
+          "publication_date": "2023-07-17",
+          "cited_by_count": 3252,
+          "doi": "https://doi.org/10.1038/s41591-023-02448-8",
+          "primary_location": {
+            "source": {
+              "display_name": "Nature Medicine"
+            }
+          },
+          "authorships": [
+            {
+              "author": {
+                "display_name": "Arun James Thirunavukarasu"
+              }
+            },
+            {
+              "author": {
+                "display_name": "Darren Shu Jeng Ting"
+              }
+            },
+            {
+              "author": {
+                "display_name": "Kabilan Elangovan"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

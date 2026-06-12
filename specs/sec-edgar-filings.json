@@ -1,0 +1,164 @@
+{
+  "slug": "sec-edgar-filings",
+  "username": "oblanceolate_mandola",
+  "title": "SEC EDGAR Filings Search — Company Filings to JSON",
+  "shortDescription": "Search SEC EDGAR full-text for company filings (8-K, 10-K, S-1 and more) and get filer, form type, date and document URL as JSON — $0.005 per filing.",
+  "seoTitle": "SEC EDGAR Filings Scraper — Full-Text Filing Search to JSON API",
+  "seoDescription": "SEC EDGAR filings scraper & API: search full-text filings by company or keyword for form type, filer and date as clean JSON. For due-diligence AI agents.",
+  "seoTitleSafe": true,
+  "categories": [
+    "BUSINESS",
+    "NEWS",
+    "AUTOMATION"
+  ],
+  "viewFields": [
+    "query",
+    "title",
+    "form",
+    "filedAt",
+    "filer",
+    "documentId"
+  ],
+  "pricing": {
+    "pricePerResultUsd": 0.005
+  },
+  "sourceMode": "firstHit",
+  "defaults": {
+    "maxResults": 100
+  },
+  "query": {
+    "label": "Keyword or company name",
+    "description": "Full-text query across all SEC filings, e.g. \"artificial intelligence\", \"Tesla\", or a person/product name. Matches filing text, not just company names.",
+    "example": "artificial intelligence",
+    "prefill": [
+      "artificial intelligence"
+    ]
+  },
+  "readme": {
+    "intro": "Every material corporate event in the US is disclosed in an SEC filing — acquisitions, executive changes, risk factors, new products. This actor turns a keyword into the matching filings across all of EDGAR, so finance, legal, and due-diligence agents can read corporate disclosures as structured data instead of scraping HTML.",
+    "bullets": [
+      "Full-text search across all SEC EDGAR filings by keyword, company, person, or product",
+      "Each result: filing title, form type (8-K/10-K/S-1/…), filing date, filer name + CIK, and EDGAR document id",
+      "Filter by keyword, date posted (postedAfter) for incremental disclosure monitoring",
+      "Batch many queries per run; cap spend with maxResults",
+      "Agent-ready: flat JSON, sourceUrl + scrapedAt on every item for citation"
+    ],
+    "sampleOutput": {
+      "query": "artificial intelligence",
+      "source": "sec_edgar",
+      "title": "EX-10.17(A)",
+      "form": "EX-10.17(A)",
+      "filer": [
+        "ViewRay, Inc. (VRAYQ) (CIK 0001597313)"
+      ],
+      "filedAt": "2015-07-29",
+      "documentId": "0001193125-15-268413:d89741dex1017a.htm",
+      "sourceUrl": "https://efts.sec.gov/LATEST/search-index?q=artificial+intelligence",
+      "scrapedAt": "2026-06-11T09:00:00.000Z"
+    },
+    "faq": [
+      {
+        "q": "What does it search?",
+        "a": "The SEC EDGAR full-text index, which covers filings from 2001 onward across every form type."
+      },
+      {
+        "q": "How do I get only recent filings?",
+        "a": "Set postedAfter to an ISO date (YYYY-MM-DD); combined with a schedule this becomes a live disclosure feed."
+      },
+      {
+        "q": "Is this affiliated with the SEC?",
+        "a": "No — it reads the SEC’s public EDGAR API. Always confirm against the official filing for legal use."
+      },
+      {
+        "q": "How do I open a filing?",
+        "a": "Each result carries its EDGAR document id (accession:file) and the filer CIK; look it up on sec.gov, or use the sourceUrl to re-run the search. Direct document-URL construction is planned for v1.1."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "sec_edgar",
+      "urlTemplate": "https://efts.sec.gov/LATEST/search-index?q={query}",
+      "headers": {
+        "user-agent": "actor-factory/1.0 (Apify Actor; contact via Apify profile)"
+      },
+      "itemsPath": "hits.hits",
+      "fields": {
+        "jobId": "_id",
+        "title": "_source.file_type",
+        "form": "_source.form",
+        "filer": "_source.display_names",
+        "cik": "_source.ciks.0",
+        "filedAt": {
+          "path": "_source.file_date",
+          "transform": "toIso"
+        },
+        "postedAt": {
+          "path": "_source.file_date",
+          "transform": "toIso"
+        },
+        "documentId": "_id",
+        "rootForm": "_source.root_forms.0"
+      }
+    }
+  ],
+  "fixtures": {
+    "sec_edgar": {
+      "hits": {
+        "hits": [
+          {
+            "_id": "0001193125-15-268413:d89741dex1017a.htm",
+            "_source": {
+              "file_date": "2015-07-29",
+              "file_type": "EX-10.17(A)",
+              "form": "8-K",
+              "root_forms": [
+                "8-K"
+              ],
+              "display_names": [
+                "ViewRay, Inc.  (VRAYQ)  (CIK 0001597313)"
+              ],
+              "ciks": [
+                "0001597313"
+              ]
+            }
+          },
+          {
+            "_id": "0001193125-18-016648:d500497dex991.htm",
+            "_source": {
+              "file_date": "2018-01-23",
+              "file_type": "EX-99.1",
+              "form": "8-K",
+              "root_forms": [
+                "8-K"
+              ],
+              "display_names": [
+                "Tesla, Inc.  (TSLA)  (CIK 0001318605)"
+              ],
+              "ciks": [
+                "0001318605"
+              ]
+            }
+          },
+          {
+            "_id": "0001193125-16-665620:d200129dex993.htm",
+            "_source": {
+              "file_date": "2016-08-01",
+              "file_type": "EX-99.3",
+              "form": "8-K",
+              "root_forms": [
+                "8-K"
+              ],
+              "display_names": [
+                "TESLA MOTORS INC  (TSLA)  (CIK 0001318605)"
+              ],
+              "ciks": [
+                "0001318605"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

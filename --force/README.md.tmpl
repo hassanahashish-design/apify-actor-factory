@@ -1,0 +1,89 @@
+# __TITLE__
+
+__SHORT_DESCRIPTION__
+
+__INTRO__
+
+## What this actor does
+
+__WHAT_LIST__
+
+**You only pay for successful results** — failed or empty lookups cost nothing.
+
+## Sample output
+
+Each dataset item is flat, typed JSON with a `sourceUrl` and `scrapedAt` for citation/grounding:
+
+```json
+__SAMPLE_OUTPUT__
+```
+
+## Input
+
+```json
+__SAMPLE_INPUT__
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `queries` / `query` | array / string | __QUERY_LABEL__. One or many. |
+| `maxResults` | integer | Hard spend cap (billed per result). |
+| `includeDescription` | boolean | Include full description text. |
+| `keywords` / `locations` / `remoteOnly` / `postedAfter` | filters | Narrow results; enable delta/scheduled runs. |
+
+## How much does it cost
+
+Pay-per-result: **$__PRICE_USD__ per successful result.** No subscription, no compute-unit guesswork, no charge for empty results. An orchestrator can cap spend with `maxResults`.
+
+## How to use it with AI agents (MCP), Claude, and the API
+
+### Claude Desktop / Claude Code via Apify MCP
+```json
+{
+  "mcpServers": {
+    "apify": {
+      "command": "npx",
+      "args": ["-y", "@apify/actors-mcp-server", "--actors", "__USERNAME__/__SLUG__"],
+      "env": { "APIFY_TOKEN": "<YOUR_APIFY_TOKEN>" }
+    }
+  }
+}
+```
+
+### Python (Apify API)
+```python
+from apify_client import ApifyClient
+client = ApifyClient("<YOUR_APIFY_TOKEN>")
+run = client.actor("__USERNAME__/__SLUG__").call(run_input=__SAMPLE_INPUT_PY__)
+for item in client.dataset(run["defaultDatasetId"]).iterate_items():
+    print(item)
+```
+
+### TypeScript (Apify API)
+```ts
+import { ApifyClient } from 'apify-client';
+const client = new ApifyClient({ token: '<YOUR_APIFY_TOKEN>' });
+const run = await client.actor('__USERNAME__/__SLUG__').call(__SAMPLE_INPUT__);
+const { items } = await client.dataset(run.defaultDatasetId).listItems();
+console.log(items);
+```
+
+### LangChain / CrewAI tool
+```python
+from langchain_apify import ApifyActorsTool
+tool = ApifyActorsTool("__USERNAME__/__SLUG__")  # agent calls it autonomously
+```
+
+OpenAPI schema for self-integrating GPT agents is auto-exposed at the Actor's API tab.
+
+## Data & compliance
+
+Reads only publicly accessible endpoints. No login, no credential harvesting, no CAPTCHA bypass. Every result carries its `sourceUrl` so downstream agents can cite and re-verify.
+
+## FAQ
+
+__FAQ__
+
+## Changelog
+
+- **1.0** — Initial release: __SOURCE_SUMMARY__.
